@@ -2,6 +2,7 @@
   "depedencies": [
     "./config",
     "./config/routes",
-    "./server"
+    "./server",
+    "./ngm"
   ]
 }

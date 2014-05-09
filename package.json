@@ -41,6 +41,8 @@
     "underscore.string": "~2.3.3",
     "lodash": "~2.4.1",
     "express": "~4.1.1",
-    "architect": "~0.1.11"
+    "architect": "~0.1.11",
+    "bluebird": "~1.2.4",
+    "yargs": "~1.2.1"
   }
 }

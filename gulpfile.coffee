@@ -27,7 +27,6 @@ watch   = require 'gulp-watch'
 
 ngmodules = require './build-support/ngm-tasks'
 ngm       = require './build-support/ngm'
-server    = require './app/src/'
 
 DEST_ROOT = '.tmp/public/'
 dest = (dirpath)-> path.normalize "#{DEST_ROOT}/#{dirpath}"
@@ -39,7 +38,8 @@ env = process.env.NODE_ENV
 isDev = -> env == 'develop'
 
 ###*
- * @todo setup develop with livereload of server
+ * @todo setup develop with livereload of server 
+
  * @todo uglify and put in single app.min.js based on NODE_ENV [development | production]
  * @todo uglify and merge vendors into vendor.min.js
  * @todo scaffold unit tests and e2e tests
@@ -52,7 +52,8 @@ isDev = -> env == 'develop'
  * @done add vendor scripts
 ###
 
-
+gulp.task 'run-server', ->
+  app = require('./app/src')()
 
 gulp.task 'default', ngmodules.$tasks['compile'], ->
   # gulp.start 'livereload'
