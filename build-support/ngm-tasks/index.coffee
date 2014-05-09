@@ -8,7 +8,7 @@ dest      = (dirpath)-> path.normalize "#{DEST_ROOT}/#{dirpath}"
 client    = (dirpath) -> path.normalize "./client/#{dirpath}" 
 
 modules = ngm.modules
-  watch:    true
+  watch:    false
   # isDev: isDev()
   cssDest:  dest '/ng-modules/css/'
   jsDest:   dest '/ng-modules/js/'

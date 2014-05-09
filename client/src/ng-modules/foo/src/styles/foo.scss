@@ -4,7 +4,7 @@
 
 .foo {
   @extend .foo-partial;
-  color: red;
+  color: violet;
 
   font-family: $font-family;
   text-decoration: none;

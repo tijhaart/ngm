@@ -7,9 +7,8 @@ _str  = require 'underscore.string'
 es    = require 'event-stream'
 _     = require 'lodash'
 async = require 'async'
-ngm   = require './build-support/ngm'
 
-lazypipe  = require 'lazypipe'
+lazypipe    = require 'lazypipe'
 streamqueue = require 'streamqueue'
 multistream = require 'multistream-merge'
 
@@ -27,6 +26,8 @@ sass    = require 'gulp-sass'
 watch   = require 'gulp-watch'
 
 ngmodules = require './build-support/ngm-tasks'
+ngm       = require './build-support/ngm'
+server    = require './app/src/'
 
 DEST_ROOT = '.tmp/public/'
 dest = (dirpath)-> path.normalize "#{DEST_ROOT}/#{dirpath}"
@@ -52,8 +53,9 @@ isDev = -> env == 'develop'
 ###
 
 
+
 gulp.task 'default', ngmodules.$tasks['compile'], ->
-  gulp.start 'livereload'
+  # gulp.start 'livereload'
   # console.log ngmodules
 
 # @todo use batchstream to collect multiple changes
