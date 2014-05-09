@@ -3,8 +3,12 @@ html(lang="en")
   head
     title This is an AngularJS SPA (single page app)
 
+    each stylesheet in imports.styles
+      link(rel="stylesheet", href=stylesheet)
+
   body
     h1 AngularJS SPA
     p AngularJS is a javascript framework built by Google.
 
-    
+  each script in imports.scripts
+    script(src=script)

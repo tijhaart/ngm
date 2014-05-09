@@ -1,4 +1,6 @@
 routes      = require './_routes'
+fs          = require 'fs'
+Path        = require 'path'
 
 module.exports = (options, imports, register)->
 
@@ -8,6 +10,9 @@ module.exports = (options, imports, register)->
 
   server.useStatic clientPath
 
-  app.get '/app', routes.app
+  staticImports = require (Path.join clientPath, 'imports.json')
+
+  app.get '/app', routes.app(imports:staticImports)
+
 
   register null
