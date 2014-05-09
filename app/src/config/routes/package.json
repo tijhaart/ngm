@@ -1,0 +1,9 @@
+{
+  "name": "routes",
+  "main": "routes.coffee",
+
+  "plugin": {
+    "consumes": [],
+    "provides": ["config.routes"]
+  }
+}

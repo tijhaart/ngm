@@ -1,0 +1,13 @@
+{
+  "name": "ui-route",
+  "_cacheHeaders": {
+    "ETag": "\"4a0e8157a2ff0f51d5a071e68b7798c1017b31ef\"",
+    "Content-Length": "93761",
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "_release": "e-tag:4a0e8157a",
+  "main": "index.js",
+  "_source": "https://raw.github.com/angular-ui/ui-router/aa0355567b60b2b07dadc5efa42cc4c212b99f2b/release/angular-ui-router.js",
+  "_target": "*",
+  "_originalSource": "https://raw.github.com/angular-ui/ui-router/aa0355567b60b2b07dadc5efa42cc4c212b99f2b/release/angular-ui-router.js"
+}

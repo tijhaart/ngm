@@ -1,0 +1,30 @@
+{
+  "name": "ngmgulp",
+  "version": "0.0.0",
+  "authors": [
+    "Raymond <contact@raymond.tijhaar.com>"
+  ],
+  "description": "TODO: Add description",
+  "main": "gulpfile.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lodash": "https://raw.github.com/lodash/lodash/2.4.1/dist/lodash.js",
+    "underscore-string": "https://raw.github.com/epeli/underscore.string/6778befeabde4207186b81c50af82444930d9ab0/lib/underscore.string.js",
+    "URI": "./src/assets/vendor_local/URI/index.js",
+    "jquery": "http://codeorigin.jquery.com/jquery-2.0.3.min.js",
+    "jlinq": "https://raw.githubusercontent.com/hugoware/jlinq-beta/311779cdabfa0184bab470762b8439f97c6d80c0/jlinq.js",
+    "angular": "http://code.angularjs.org/1.2.13/angular.js",
+    "ui-route": "https://raw.github.com/angular-ui/ui-router/aa0355567b60b2b07dadc5efa42cc4c212b99f2b/release/angular-ui-router.js",
+    "angular-cookies": "http://code.angularjs.org/1.2.13/angular-cookies.js",
+    "angular-resource": "http://code.angularjs.org/1.2.13/angular-resource.js"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "depedencies": [
+    "./config",
+    "./config/routes",
+    "./server"
+  ]
+}

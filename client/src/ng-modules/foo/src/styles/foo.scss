@@ -1,0 +1,11 @@
+@import "client/src/ng-modules/config";
+@import "_partial";
+
+
+.foo {
+  @extend .foo-partial;
+  color: red;
+
+  font-family: $font-family;
+  text-decoration: none;
+}
