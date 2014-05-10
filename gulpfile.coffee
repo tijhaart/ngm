@@ -30,7 +30,7 @@ ngm       = require './build-support/ngm'
 
 DEST_ROOT = '.tmp/public/'
 dest = (dirpath)-> path.normalize "#{DEST_ROOT}/#{dirpath}"
-client = (dirpath) -> path.normalize "./client/#{dirpath}" 
+client = (dirpath) -> path.normalize "./client#{dirpath}" 
 
 process.env.NODE_ENV = 'develop'
 env = process.env.NODE_ENV
@@ -52,7 +52,22 @@ isDev = -> env == 'develop'
  * @done add vendor scripts
 ###
 
-gulp.task 'run-server', ->
+gulp.task 'imports.json', ngmodules.$tasks['compile'], (cb)->
+  imports = {}
+
+  scripts = (glob.sync dest '/ng-modules/js/*.js').map (item)->  '/' + item.replace DEST_ROOT, ''
+  styles = (glob.sync dest '/ng-modules/css/*.css').map (item)->  '/' + item.replace DEST_ROOT, ''
+
+  imports.scripts = scripts 
+  imports.styles = styles 
+
+  # console.log imports
+
+  fs.writeFile dest('imports.json'), JSON.stringify(imports), (err)->
+    throw Error err if err
+    cb()
+
+gulp.task 'run-server', ['imports.json'], ->
   app = require('./app/src')()
 
 gulp.task 'default', ngmodules.$tasks['compile'], ->
