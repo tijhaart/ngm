@@ -1,3 +1,5 @@
+routes      = require './_routes'
+
 module.exports = (options, imports, register)->
 
   server      = imports.server
@@ -6,8 +8,6 @@ module.exports = (options, imports, register)->
 
   server.useStatic clientPath
 
-  app.get '/foo', (req, res)-> 
-
-    res.render __dirname + '/templates/angular-app'
+  app.get '/app', routes.app
 
   register null

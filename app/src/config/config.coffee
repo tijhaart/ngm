@@ -4,6 +4,13 @@ module.exports = (options, imports, register)->
 
   PROJECT_PATH = path.resolve __dirname, '../../../'
 
+  ###*
+   * @todo make the config a getter/setter
+   * @example
+   * config('item') 
+   * or
+   * config('item', foo:'bar')
+  ###
 
   config =
     routes: imports["config.routes"]
