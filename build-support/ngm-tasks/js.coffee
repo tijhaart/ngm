@@ -1,4 +1,5 @@
 path      = require 'path'
+imports   = require '../gulp-imports'
 
 coffee    = require 'gulp-coffee'
 concat    = require 'gulp-concat'
@@ -16,7 +17,7 @@ module.exports = (modules, gulp, gutil)->
         .pipe coffee( bare: true ) # sourceMpa = error because of macro
         # .pipe sweet modules: ['./build-support/macros/di'] # superslow. with it: ~750ms, without ~30ms, use only for production.min.js
         .pipe concat module.dirName + '.js'
-        .pipe wrap ";(function(angular) { <%= contents %> } )(angular);"      
+        .pipe wrap ";(function(angular) { <%= contents %> } )(angular);"
         # .pipe gulpif isDev(), pretty()
 
     # module.watch target, 'compile.coffee.'+module.name, task

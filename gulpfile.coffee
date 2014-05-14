@@ -24,9 +24,11 @@ pretty  = require 'gulp-js-prettify'
 gulpif  = require 'gulp-if'
 sass    = require 'gulp-sass'
 watch   = require 'gulp-watch'
+plumber = require 'gulp-plumber'
 
 ngmodules = require './build-support/ngm-tasks'
 ngm       = require './build-support/ngm'
+imports   = require './build-support/gulp-imports'
 
 DEST_ROOT = '.tmp/public/'
 dest = (dirpath)-> path.normalize "#{DEST_ROOT}/#{dirpath}"
@@ -38,6 +40,7 @@ env = process.env.NODE_ENV
 isDev = -> env == 'develop'
 
 ###*
+ * @todo fix assets
  * @todo setup develop with livereload of server 
 
  * @todo uglify and put in single app.min.js based on NODE_ENV [development | production]
@@ -52,27 +55,35 @@ isDev = -> env == 'develop'
  * @done add vendor scripts
 ###
 
-gulp.task 'imports.json', ngmodules.$tasks['compile'], (cb)->
-  imports = {}
+gulp.task 'default', ->
 
-  scripts = (glob.sync dest '/ng-modules/js/*.js').map (item)->  '/' + item.replace DEST_ROOT, ''
-  styles = (glob.sync dest '/ng-modules/css/*.css').map (item)->  '/' + item.replace DEST_ROOT, ''
+gulp.task 'imports', ->
+  sources = [ 
+    dest('/vendor/vendor.css'),
+    dest('/ng-modules/css/*.css'),
+    dest('/css/theme.css')
+    dest('/vendor/vendor.js'),
+    dest('/js/*.js'),
+    dest('/ng-modules/js/*.js')
+    dest('/ng-modules/ngm-main.js')
+  ]
 
-  imports.scripts = scripts 
-  imports.styles = styles 
+  gulp.src sources, read: false, base: DEST_ROOT
+    .pipe imports filename: 'imports.json'
+    .pipe pretty wrap_line_length: 10
+    .pipe gulp.dest '.tmp/public'
 
-  # console.log imports
-
-  fs.writeFile dest('imports.json'), JSON.stringify(imports), (err)->
-    throw Error err if err
-    cb()
-
-gulp.task 'run-server', ['imports.json'], ->
+gulp.task 'run-server', ->
   app = require('./app/src')()
 
-gulp.task 'default', ngmodules.$tasks['compile'], ->
-  # gulp.start 'livereload'
-  # console.log ngmodules
+
+gulp.task 'ngm:compile', ngmodules.$tasks['compile'], ->
+
+gulp.task 'ngm:main', ['ngm:compile'], ->
+  gulp.src (client '/src/ng-modules/ngm-main.coffee')
+    # .pipe watch()
+    .pipe coffee()
+    .pipe gulp.dest dest('/ng-modules/')
 
 # @todo use batchstream to collect multiple changes
 gulp.task 'livereload', ->
@@ -80,9 +91,9 @@ gulp.task 'livereload', ->
     # call lr with changes
 
 gulp.task 'assets:css', ->
-  gulp.src client '/src/assets/css/theme/theme.scss'
+  gulp.src [ client '/src/assets/css/theme/*.scss', client '/src/assets/css/base/*.scss' ]
     .pipe sass()
-    .pipe gulp.dest dest('/css/')
+    .pipe gulp.dest dest('/css')
 
 ###*
  * @todo figure out how to include vendor:css
@@ -101,7 +112,9 @@ gulp.task 'vendor:js', ->
       gulp.src src
         .pipe concat 'vendor.js'
 
-  vendor.vendors().pipe gulp.dest dest('/vendor')
+  vendor.vendors()
+    .pipe gulp.dest dest('/vendor')
+    # .pipe imports 'vendor'
 
 
 gulp.task 'assets:js', ->
@@ -121,12 +134,6 @@ gulp.task 'assets:js', ->
 
   assets.joinJS().pipe gulp.dest dest('/js')
 
-
-gulp.task 'ngm:main', ['ngm:compile'], ->
-  gulp.src (client '/src/ng-modules/ngm-main.coffee')
-    # .pipe watch()
-    .pipe coffee()
-    .pipe gulp.dest dest('/ng-modules/js/')
 
 
 gulp.task 'clean', ->
