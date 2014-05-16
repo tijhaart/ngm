@@ -2,11 +2,12 @@ glob  = require 'glob'
 gulp  = require 'gulp'
 gutil = require 'gulp-util'
 fs    = require 'fs'
-path  = require 'path'
+Path = path  = require 'path' # @todo path -> Path
 _str  = require 'underscore.string'
 es    = require 'event-stream'
 _     = require 'lodash'
 async = require 'async'
+es    = require 'event-stream'
 
 lazypipe    = require 'lazypipe'
 streamqueue = require 'streamqueue'
@@ -39,6 +40,8 @@ env = process.env.NODE_ENV
 
 isDev = -> env == 'develop'
 
+watchFiles = isDev()
+
 ###*
  * @todo fix assets
  * @todo setup develop with livereload of server 
@@ -59,7 +62,8 @@ gulp.task 'default', ->
 
 gulp.task 'imports', ->
   sources = [ 
-    dest('/vendor/vendor.css'),
+    # vendor: should be vendor.min.css
+    # for production it should find only one css file (e.g. ng-modules.min.css)
     dest('/ng-modules/css/*.css'),
     dest('/css/theme.css')
     dest('/vendor/vendor.js'),
@@ -71,7 +75,7 @@ gulp.task 'imports', ->
   gulp.src sources, read: false, base: DEST_ROOT
     .pipe imports filename: 'imports.json'
     .pipe pretty wrap_line_length: 10
-    .pipe gulp.dest '.tmp/public'
+    .pipe gulp.dest DEST_ROOT
 
 gulp.task 'run-server', ->
   app = require('./app/src')()
@@ -95,46 +99,46 @@ gulp.task 'assets:css', ->
     .pipe sass()
     .pipe gulp.dest dest('/css')
 
-###*
- * @todo figure out how to include vendor:css
- * @return {[type]} [description]
-###
 gulp.task 'vendor:js', ->
-  bower = require './bower.json'
 
-  vendor =
-    path: client '/src/assets/'
-    vendors: ->
-      _path = @path
-      # this will maintain the order set in in bower.json
-      src = _.map bower.dependencies, (vendor, index)->
-        return "#{_path}/vendor/#{index}/index.js" # will also include local vendor scripts b/c bower installs and copies to vendor dir
-      gulp.src src
-        .pipe concat 'vendor.js'
+  task = ->    
+    bower = require './bower.json'
+    # this will maintain the order set in in bower.json
+    sources = _.map bower.dependencies, (vendor, index)->
+      # will also include local vendor scripts b/c bower installs and copies to vendor dir
+      return client "/src/assets/vendor/#{index}/index.js" 
+    gulp.src sources
+      .pipe concat 'vendor.js'
+      .pipe gulp.dest dest '/vendor'
 
-  vendor.vendors()
-    .pipe gulp.dest dest('/vendor')
-    # .pipe imports 'vendor'
-
+  task()
 
 gulp.task 'assets:js', ->
+  base    = (path) -> client '/src/assets' + path
+  js      = base '/js/*.js'
+  _coffee = base '/js/*.coffee'
 
-  assets =
-    path: client '/src/assets/'
-    coffee: ->
-      gulp.src (client '/src/assets/js/*.coffee'), read: false
-        .pipe coffee()
-    js: ->
-      gulp.src @path + '/js/*.js'
-    joinJS: ->
-      (streamqueue objectMode:true,
-        @coffee(),
-        @js()
-      ).pipe concat 'misc.js'
+  task = ->
+    streamqueue( objectMode: true,
+      (gulp.src js),      
+      (gulp.src _coffee
+        .pipe coffee())
+    )
+      .pipe concat 'scripts.js'
+      .pipe gulp.dest dest '/js/'
 
-  assets.joinJS().pipe gulp.dest dest('/js')
+  stream = task()
+
+  if watchFiles
+    gutil.log 'watching: ', js, _coffee
+    gulp.watch [js, _coffee], -> 
+      gutil.log arguments 
+      task()
+
+  return stream
 
 
+gulp.task 'assets:all', ['assets:css' 'vendor:js', 'assets:js']
 
 gulp.task 'clean', ->
   gulp.src '.tmp'
