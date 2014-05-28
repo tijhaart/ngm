@@ -9,6 +9,8 @@ module.exports = (options, imports, register)->
   app         = server.instance
   clientPath  = imports.config.clientPath
 
+  isDev = process.env.NODE_ENV == 'develop'
+
   server.useStatic clientPath
 
   staticImports = require (Path.join clientPath, 'imports.json')
@@ -17,7 +19,7 @@ module.exports = (options, imports, register)->
     css: []
     js: []
 
-  app.get '/app', routes.app(imports:staticImports)
+  app.get '/app', routes.app(imports:staticImports, isDev: isDev)
 
 
   register null

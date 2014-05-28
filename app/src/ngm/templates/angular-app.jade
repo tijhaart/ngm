@@ -10,5 +10,12 @@ html(lang="en")
     h1 AngularJS SPA
     p AngularJS is a javascript framework built by Google.
 
+    div.todo-example(ng-include="'todo/todo-example.html'")
+
   each script in imports.js
     script(src=script)
+
+  if isDev
+    script(src="//localhost:35729/livereload.js")
+  else
+    //- analytics

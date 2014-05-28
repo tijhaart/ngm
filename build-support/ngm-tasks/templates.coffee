@@ -26,12 +26,6 @@ module.exports = (modules, gulp, gutil)->
         task(module).pipe gulp.dest args.tplDest
         return
 
-    ###*
-     * if is !dev then
-     * join all templates into a single file
-     * this should be placed into an own task
-    ###
-
     return task(module).pipe gulp.dest args.tplDest
 
   return

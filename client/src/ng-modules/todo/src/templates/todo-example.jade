@@ -1,0 +1,12 @@
+//- @example: $templateCache.get "todo/todoExample.html"
+h2 Todo example
+
+div(todos)
+
+  form
+    div.field(ng-repeat="todo in todos", ng-include="'todo/todo.html'")
+
+    div
+      button(ng-click="Todo.addTodo({done:false})") [+] New
+
+  pre {{ todos | json }}

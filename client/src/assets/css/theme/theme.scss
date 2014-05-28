@@ -1,20 +1,2 @@
 @import "../base/base";
 @import "_theme_config";
-
-html {
-  min-height: 100%;
-  background: blue;
-}
-
-body {
-  font-family: $font-family;
-  font-weight: normal;
-  color: $main-color;
-}
-
-.ngmodule {
-  @extend %_ngmodule;
-
-  border: 1px dashed #ccc;
-  box-shadow: 5px 5px #333;
-}

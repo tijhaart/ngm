@@ -34,7 +34,8 @@
     "gulp-if": "~1.1.0",
     "gulp-watch": "~0.6.3",
     "through2": "~0.4.1",
-    "gulp-plumber": "~0.6.1"
+    "gulp-plumber": "~0.6.1",
+    "gulp-livereload": "~1.5.0"
   },
   "dependencies": {
     "coffee-script": "~1.7.1",
