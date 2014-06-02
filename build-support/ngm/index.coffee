@@ -20,7 +20,24 @@ NGModule:: =
     @dirName = path.basename(@path.substr(0,@path.lastIndexOf '/src'))
     @name   = _str.camelize @dirName
 
+    @tasks = {}
+
     return @
+
+  ###*
+   * module.task 'coffee', (module)->
+   *   return taskFn = ->
+   *     
+  ###
+  task: (taskId, task)->
+    self = this;
+    self.tasks["#{self.name}:#{taskId}"] = task.apply(self, [self])
+    return self
+
+  # NGModule.run 'coffee'
+  run : (taskId)->
+    self = this
+    gulp.start "#{self.name}:#{taskId}"
 
 module.exports.module = NGModule
 
