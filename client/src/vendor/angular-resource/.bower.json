@@ -1,14 +1,14 @@
 {
   "name": "angular-resource",
   "_cacheHeaders": {
-    "ETag": "\"52fed9c7-5bc6\"",
-    "Last-Modified": "Sat, 15 Feb 2014 03:06:47 GMT",
-    "Content-Length": "23494",
+    "ETag": "\"533ddef0-5d1d\"",
+    "Last-Modified": "Thu, 03 Apr 2014 22:21:36 GMT",
+    "Content-Length": "23837",
     "Content-Type": "application/x-javascript"
   },
-  "_release": "e-tag:52fed9c7-",
+  "_release": "e-tag:533ddef0-",
   "main": "index.js",
-  "_source": "http://code.angularjs.org/1.2.13/angular-resource.js",
+  "_source": "http://code.angularjs.org/1.2.16/angular-resource.js",
   "_target": "*",
-  "_originalSource": "http://code.angularjs.org/1.2.13/angular-resource.js"
+  "_originalSource": "http://code.angularjs.org/1.2.16/angular-resource.js"
 }

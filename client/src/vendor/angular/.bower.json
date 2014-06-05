@@ -1,14 +1,14 @@
 {
   "name": "angular",
   "_cacheHeaders": {
-    "ETag": "\"52febd46-b4233\"",
-    "Last-Modified": "Sat, 15 Feb 2014 01:05:10 GMT",
-    "Content-Length": "737843",
+    "ETag": "\"533ddef0-b8b08\"",
+    "Last-Modified": "Thu, 03 Apr 2014 22:21:36 GMT",
+    "Content-Length": "756488",
     "Content-Type": "application/x-javascript"
   },
-  "_release": "e-tag:52febd46-",
+  "_release": "e-tag:533ddef0-",
   "main": "index.js",
-  "_source": "http://code.angularjs.org/1.2.13/angular.js",
+  "_source": "http://code.angularjs.org/1.2.16/angular.js",
   "_target": "*",
-  "_originalSource": "http://code.angularjs.org/1.2.13/angular.js"
+  "_originalSource": "http://code.angularjs.org/1.2.16/angular.js"
 }

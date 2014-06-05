@@ -14,7 +14,7 @@ module.exports = (options, imports, register)->
 
   config =
     routes: imports["config.routes"]
-    clientPath: PROJECT_PATH + '/.tmp/public'
+    clientPath: PROJECT_PATH + '/dist/public'
     serverPort: 9000 || 1234
     projectPath: PROJECT_PATH
     database:

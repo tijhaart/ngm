@@ -1,10 +1,24 @@
-@import "partial";
+@import "theme_config";
+@import "_partial";
 
-.todo-example {
+$prefix: 'todo';
+
+.#{prefix}-example {
 
   input[type="text"] {
-    border: 1px solid #888;
+    border: 1px solid $color;
     padding: 10px;
     border-radius: 2px;
   }
+}
+
+.btn-#{$prefix} {
+  // @include btn;
+  
+  @extend %btn;
+  background: lighten($color, 10%);
+  foo:bar;
+
+  yellow: $yellow;
+  green: $yellow;
 }

@@ -1,0 +1,11 @@
+// @import "config";
+@import "../theme/theme_config";
+// @import "mixins";
+
+html {
+  font-family: $font-family;
+  color: $color;
+  line-height: $line-height;
+  background: lighten($color, 5%);
+  yes: no;
+}

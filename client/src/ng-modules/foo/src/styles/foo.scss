@@ -1,0 +1,15 @@
+.foo {
+  .bar {
+    .all {
+      .the {
+        .things {
+          color: #fff000;
+        }
+      }
+    }
+  }
+}
+
+.btn-foo {
+  @extend %btn;
+}

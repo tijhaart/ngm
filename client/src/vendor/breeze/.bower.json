@@ -1,0 +1,13 @@
+{
+  "name": "breeze",
+  "_cacheHeaders": {
+    "ETag": "\"d8a31bb740f6cd47a0f029a05044edded4158e1a\"",
+    "Content-Length": "639210",
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "_release": "e-tag:d8a31bb74",
+  "main": "index.js",
+  "_source": "https://raw.githubusercontent.com/IdeaBlade/Breeze/4de3eef02b9dcbda39c6671fd2203e317b4a8901/Breeze.Client/Scripts/breeze.debug.js",
+  "_target": "*",
+  "_originalSource": "https://raw.githubusercontent.com/IdeaBlade/Breeze/4de3eef02b9dcbda39c6671fd2203e317b4a8901/Breeze.Client/Scripts/breeze.debug.js"
+}

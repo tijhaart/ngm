@@ -1,2 +1,6 @@
-@import "../base/base";
-@import "_theme_config";
+@import "theme_config";
+
+html {
+  font-family: $font-family;
+  color: $color;
+}
