@@ -1,3 +1,11 @@
 @import "../base/config";
 
 $font-family: 'sans-serif';
+$color: darken($color,  5%);
+$line-height: 1.4em;
+
+%btn {
+  border: 1px solid $color;
+  height: 1px;
+  // width: 1px;
+}

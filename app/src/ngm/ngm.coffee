@@ -13,7 +13,12 @@ module.exports = (options, imports, register)->
 
   server.useStatic clientPath
 
-  staticImports = require (Path.join clientPath, 'imports.json')
+  # staticImports = require (Path.join clientPath, 'imports.json')
+
+  staticImports = 
+    css: ['css/app.css']
+    js: ['vendor/vendor.js', 'js/app.js']
+
 
   _.defaults staticImports,
     css: []

@@ -37,7 +37,9 @@
     "multistream-merge": "~0.1.0",
     "streamqueue": "0.0.6",
     "through": "~2.3.4",
-    "through2": "~0.4.1"
+    "through2": "~0.4.1",
+    "gulp-insert": "~0.3.0",
+    "gulp-uglify": "~0.3.0"
   },
   "dependencies": {
     "coffee-script": "~1.7.1",
