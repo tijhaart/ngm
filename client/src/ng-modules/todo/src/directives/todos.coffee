@@ -1,4 +1,17 @@
 do (module)->
+
+  controller = di ($scope, TodoService)->
+    $scope.Todo = Todo = TodoService 
+    $scope.todos = TodoService.collection
+
+    $scope.$watch 'todos.length', (count)->
+      console.log 'There are now ' + count + ' todos'
+
+    return 
+
+  link = ($scope, $el, attrs, ctrl)->
+    return
+
   ###**
    * @ngdoc directive
    * @name todo.directive:todos
@@ -10,12 +23,9 @@ do (module)->
    * @example
      <div todos></div>
   ###
-  module.directive 'todos', di ()->
+  module.directive 'todos', ->
     restrict: 'A'
-    controller: di ($scope, TodoService)->
-      $scope.Todo = Todo = TodoService 
-      $scope.todos = TodoService.collection
+    controller: controller
+    link: link
 
-      return 
-    link: ($scope, $el, attrs, ctrl)->
-      return
+  return

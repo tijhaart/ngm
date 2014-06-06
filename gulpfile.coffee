@@ -22,122 +22,12 @@ streamqueue = require 'streamqueue'
 plumber     = require 'gulp-plumber'
 uglify      = require 'gulp-uglify'
 gulpif      = require 'gulp-if'
+nginject    = require 'gulp-angular-injector'
+livereload  = require 'gulp-livereload'
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
-###
-  Given gulp is running
-  When a new module is created
-  Then it should create the ng module tasks
-  And run all of them
---
-  Then it should create a single module (virtual) file per module
-  And it should combine all the modules into a single (virtual) file
-
-  
-
-  gulp.src modules
-    .pipe module.task('coffee')
-    .pipe concat 'app.js'
-    .pipe gulp.dest '.tmp/'
-  
-  gulp.src modules
-  # run the coffee task on module basis
-  # and add the output to file.contents in the stream
-  .pipe ngmodules.task('coffee') 
-  .pipe concat 'app.js'
-  .pipe gulp.dest '.tmp/js'
-
-  ngmodule = (path)->
-    module = new NGModule path: path
-
-  ngmodules = glob.sync modules
-
-  ngmodules.forEach (path)->
-    ngmodule(path)
-      .setTasks()
-      .runTasks()
-
-  gulp.watch modules, (path)->
-    # only on new modules
-    ngmodule(path)
-      .setTasks()
-      .runTasks()
-
-###
-
-# https://github.com/gulpjs/gulp/blob/master/docs/recipes/running-task-steps-per-folder.md
-# runTaskPerModule = (taskId)->
-#   tasks = []
-#   stream = 
-#     start: null
-#     end: null
-#   finish = null
-
-#   stream.start = (file, encoding, next)->
-#     self = this
-
-#     ngmodule = new ngm.module path: file.path
-
-#     filesToWatch = ngmodule.path + '/**/*.coffee'
-#     watching     = null
-
-#     coffeeTask = ->
-#       gulp.src filesToWatch
-#         .pipe cached ngmodule.name
-#         .pipe coffee bare:true
-#         .pipe remember ngmodule.name
-#         .pipe concat ngmodule.name + '.js'
-#         .pipe wrap ';(function(angular){<%= contents %>})(angular);'
-#         .pipe pretty()
-#         # .pipe gulp.dest '.tmp/'
-#         # .on 'data', (_file)->
-#         #   # if !watching
-#         #   next(null, _file)
-          
-
-#     tasks.push coffeeTask
-
-#     gulp.watch filesToWatch, ->
-#       # watching = true
-#       console.log arguments
-#       finish()
-
-#     next()
-
-#   stream.end = (next)->   
-#     finish = ->
-#       _tasks = tasks.map (task)-> task()
-
-#       (es.concat.apply null, _tasks)
-#         .pipe concat 'app.js'
-#         .pipe gulp.dest '.tmp/js'
-#         .on 'end', next
-
-#     finish()
-
-#   return through.obj stream.start, stream.end
-
-# gulp.task 'default', ['ngm:modules']
-# gulp.task 'ngm:modules', ->
-
-#   # todo = new ngm.module(path:'./client/src/ng-modules/todo/src')
-
-#   gulp.src ngmodulesGlob, read: false
-#     .pipe runTaskPerModule('coffee')
-#     # .pipe concat 'app.js'
-#     # .pipe gulp.dest '.tmp/js'
-
-
-# read modules
-# write into single module
-  # src coffee file
-  # cache
-  # coffee
-  # remember
-  # concat
-  # wrap
-# write to app.js
+process.env.NODE_ENV = 'develop'
 
 CONFIG =
   dev: true
@@ -172,6 +62,7 @@ coffeeTask = (ngmodule)->
   gulp.src ngmodule.path + '/**/*.coffee'
     .pipe cached ngmodule.name + ':coffee'
     .pipe coffee bare:true
+    .pipe nginject(token:'di')
     .pipe remember ngmodule.name + ':coffee'
     .pipe concat ngmodule.name + '.js'
     .pipe wrap ';(function(angular){<%= contents %>})(angular);'
@@ -229,11 +120,29 @@ jsVendorTask = ->
     .pipe concat 'vendor.js'
     .pipe remember 'vendor.js'
 
-runServerTask = ->
-  return require('./app/src')()
+jsTask = ->
+  js = ->
+    gulp.src 'client/src/js/*.js', ->
 
-gulp.task 'default', ['develop']
-gulp.task 'develop', ['ngm:app.js', 'ngm:app.css', 'vendor.js', 'watch']
+  coffeeJs = ->
+    gulp.src 'client/src/js/*.coffee'
+      .pipe coffee( bare: true )
+
+  es.concat js(), coffeeJs()
+
+server = require('./app/src')
+
+runServerTask = ->
+  if _.isFunction server then server = server() else return server
+
+  ###
+  start: -> server()
+  stop: -> @server.kill()
+  ###
+
+gulp.task 'default', ['server:run'], ->
+gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor.js']
+gulp.task 'develop', ['watch']
 
 gulp.task 'ngm:app.js', ->
   # tasks = ngmodules [jadeTask, coffeeTask]
@@ -241,6 +150,7 @@ gulp.task 'ngm:app.js', ->
 
   streamqueue(
     {objectMode: true},
+    jsTask(),
     ngmodules.join(ngmodules coffeeTask),
     ngmodules.join(ngmodules jadeTask),
     ngmMainTask()
@@ -271,16 +181,32 @@ gulp.task 'vendor.js', ->
 
 gulp.task 'vendor.css', ->
 
-gulp.task 'server:run', ->
+gulp.task 'server:run', ['develop'], ->
   runServerTask()
 
-gulp.task 'watch', ->
+
+
+gulp.task 'watch', ['build'], ->
+  lr = livereload()
   # currently works only for existing files
-  gulp.watch './client/src/ng-modules/**/src/**/*.coffee', ['ngm:app.js']
-  gulp.watch './client/src/ng-modules/ngm-main.coffee', ['ngm:app.js']
+  gulp.watch [
+    'client/src/js/*.{js,coffee}',
+    'client/src/ng-modules/**/src/**/*.coffee', 
+    'client/src/ng-modules/ngm-main.coffee'], ['ngm:app.js']
 
   gulp.watch [
-    './client/src/ng-modules/**/src/styles/*.scss',
-    './client/src/css/**/*.scss'], ['ngm:app.css']
+    'client/src/ng-modules/**/src/styles/*.scss',
+    'client/src/css/**/*.scss'], ['ngm:app.css']
 
-  gulp.watch ['./client/src/vendor/**/*.js'], ['vendor.js']
+  gulp.watch ['client/src/vendor/**/*.js'], ['vendor.js']
+
+  gulp.watch 'dist/public/**/*.{js,css}', ->
+    console.log 'changes:', arguments
+    # Full page reload
+    # https://github.com/vohof/gulp-livereload/issues/7
+    lr.changed path: 'index.html' 
+
+
+# 1. build
+# 2. run server
+# 3. watch changes -> reload browser
