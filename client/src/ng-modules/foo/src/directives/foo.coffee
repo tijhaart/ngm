@@ -12,7 +12,5 @@ do (module)->
   ###
   module.directive 'foo', di ()->
     restrict: 'A'
-    controller: di ($scope)->
-      return 
     link: ($scope, $el, attrs, ctrl)->
       return

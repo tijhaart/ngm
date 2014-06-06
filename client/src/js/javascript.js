@@ -1,5 +1,5 @@
 ;(function(window){
   "use strict";
 
-  console.log('javascript.js')
+  console.log('javascript.js');
 })(window);

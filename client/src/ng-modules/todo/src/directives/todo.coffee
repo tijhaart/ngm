@@ -13,7 +13,5 @@ do (module)->
   module.directive 'todo', di ()->
     restrict: 'A'
     require: '^todos'
-    controller: di ($scope)->
-      return 
     link: ($scope, $el, attrs, ctrl)->
       return
