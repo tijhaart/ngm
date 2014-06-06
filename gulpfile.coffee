@@ -4,9 +4,12 @@ glob        = require 'glob'
 through     = require 'through2'
 es          = require 'event-stream'
 _           = require 'lodash'
+Path        = require 'path'
+yargs       = require 'yargs'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
+server      = require('./app/src')
 
 coffee      = require 'gulp-coffee'
 concat      = require 'gulp-concat'
@@ -24,8 +27,23 @@ uglify      = require 'gulp-uglify'
 gulpif      = require 'gulp-if'
 nginject    = require 'gulp-angular-injector'
 livereload  = require 'gulp-livereload'
+cssmin      = require 'gulp-minify-css'
+clean       = require 'gulp-clean'
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
+
+log     = gutil.log
+loggers =
+  'info':     'blue'
+  'success':  'green'
+  'err':      'red'
+  'warn':     'yellow'
+  'debug':    'magenta'
+_.forEach loggers, (color, index)->
+  log[index] = ->
+    args = Array.prototype.splice.apply arguments, arguments
+    args.unshift "[#{gutil.colors[color](index)}]"
+    gutil.log.apply gutil.log, args
 
 process.env.NODE_ENV = 'develop'
 
@@ -70,7 +88,7 @@ coffeeTask = (ngmodule)->
 jadeTask = (ngmodule)->
   gulp.src ngmodule.path + '/templates/**/*.jade'
     .pipe cached ngmodule.name + ':jade'
-    .pipe jade()
+    .pipe jade( pretty: false )
     .pipe ngtpl
       filename: ngmodule.dirName + '.tpl.js'
       root: ngmodule.name
@@ -130,19 +148,12 @@ jsTask = ->
 
   es.concat js(), coffeeJs()
 
-server = require('./app/src')
-
-runServerTask = ->
-  if _.isFunction server then server = server() else return server
-
-  ###
-  start: -> server()
-  stop: -> @server.kill()
-  ###
-
-gulp.task 'default', ['server:run'], ->
+gulp.task 'default', ['develop'], ->
+gulp.task 'clean', ->
+  gulp.src './dist', read: false
+    .pipe clean()
 gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor.js']
-gulp.task 'develop', ['watch']
+gulp.task 'develop', ['server:run', 'watch']
 
 gulp.task 'ngm:app.js', ->
   # tasks = ngmodules [jadeTask, coffeeTask]
@@ -172,6 +183,7 @@ gulp.task 'ngm:app.css', ->
     sassThemeTask() 
   )
     .pipe concat 'app.css'
+    .pipe gulpif not CONFIG.isDev(), cssmin()
     .pipe gulp.dest 'dist/public/css'
 
 gulp.task 'vendor.js', ->
@@ -181,10 +193,20 @@ gulp.task 'vendor.js', ->
 
 gulp.task 'vendor.css', ->
 
-gulp.task 'server:run', ['develop'], ->
-  runServerTask()
+gulp.task 'server:run', ['build'], ->
+  server()
 
-
+gulp.task 'publish', ->
+  # set env to production
+  # build
+  # test
+  # bump semver
+  # commit
+  # create release (git flow)
+  return
+gulp.task 'ngm:docs', ->
+  # generate ng doc reference
+  return
 
 gulp.task 'watch', ['build'], ->
   lr = livereload()
@@ -200,13 +222,9 @@ gulp.task 'watch', ['build'], ->
 
   gulp.watch ['client/src/vendor/**/*.js'], ['vendor.js']
 
-  gulp.watch 'dist/public/**/*.{js,css}', ->
-    console.log 'changes:', arguments
+  gulp.watch 'dist/public/**/*.{js,css}', (change)->
+    log.info "[#{change.type}] #{Path.relative './', change.path}"
+
     # Full page reload
     # https://github.com/vohof/gulp-livereload/issues/7
     lr.changed path: 'index.html' 
-
-
-# 1. build
-# 2. run server
-# 3. watch changes -> reload browser
