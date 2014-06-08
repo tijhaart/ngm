@@ -15,8 +15,15 @@ module.exports = (options, imports, register)->
 
   # staticImports = require (Path.join clientPath, 'imports.json')
 
+  # ionic requires fonts: 
+  #   css/style
+  #     ../fonts/x.y
+  #
+
   staticImports = 
-    css: ['css/app.css']
+    css: [
+      # 'vendor/ionic/css/ionic.css', # 
+      'css/app.css']
     js: ['vendor/vendor.js', 'js/app.js']
 
 

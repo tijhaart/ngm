@@ -26,6 +26,11 @@ do (module)->
     @removeTodo = (index)=>
       @collection.splice index, 1
 
+    @deleteAll = =>
+      @collection = []
+
+      return
+
 
     @addTodo
       title: 'Create a new todo' 

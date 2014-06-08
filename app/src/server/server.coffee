@@ -1,4 +1,4 @@
-express =     require 'express'
+express     = require 'express'
 
 ###*
  * @todo Move server to plugins, nah...it's pretty critical for the app to function
