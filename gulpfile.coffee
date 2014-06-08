@@ -29,6 +29,7 @@ nginject    = require 'gulp-angular-injector'
 livereload  = require 'gulp-livereload'
 cssmin      = require 'gulp-minify-css'
 clean       = require 'gulp-clean'
+imgmin      = require 'gulp-imagemin'
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
@@ -85,15 +86,17 @@ coffeeTask = (ngmodule)->
     .pipe concat ngmodule.name + '.js'
     .pipe wrap ';(function(angular){<%= contents %>})(angular);'
 
+# caching fails b/c the moment a .jade file changes
+# it doesn't include all template (.jade) files
 jadeTask = (ngmodule)->
   gulp.src ngmodule.path + '/templates/**/*.jade'
-    .pipe cached ngmodule.name + ':jade'
+    # .pipe cached ngmodule.name + ':jade'
     .pipe jade( pretty: false )
     .pipe ngtpl
       filename: ngmodule.dirName + '.tpl.js'
       root: ngmodule.name
       module: ngmodule.name
-    .pipe remember ngmodule.name + ':jade'
+    # .pipe remember ngmodule.name + ':jade'
     .pipe concat ngmodule.name + '.tpl.js'
 
 sassTask = (ngmodule)->
@@ -114,18 +117,25 @@ sassTask = (ngmodule)->
 sassBaseTask = ->
   gulp.src [ 
     './client/src/css/base/**/*.scss']
-    .pipe cached 'css:base'
+    # .pipe cached 'css:base'
     .pipe plumber()
     .pipe sass( if CONFIG.isDev() then sourceComments:'normal' )
-    .pipe remember 'css:base'  
+    # .pipe remember 'css:base'  
 
 sassThemeTask = ->
   gulp.src [ 
     './client/src/css/theme/*.scss']
-    .pipe cached 'css:theme'
+    # .pipe cached 'css:theme'
     .pipe plumber()    
     .pipe sass( if CONFIG.isDev() then sourceComments:'normal' )
-    .pipe remember 'css:theme'
+    # .pipe remember 'css:theme'
+
+ngmImgTask = (ngmodule)->
+  path = Path.relative './client/src/ng-modules/', ngmodule.path
+  path = path.substr(0,path.lastIndexOf '/src')
+
+  gulp.src ngmodule.path + '/img/*.{png,jpg,gif,svg,jpeg}'
+    .pipe gulp.dest 'dist/public/img/' + path
 
 jsVendorTask = ->
   bower = require './bower.json'
@@ -133,6 +143,13 @@ jsVendorTask = ->
   sources = _.map bower.dependencies, (vendor, index)->
     # will also include local vendor scripts b/c bower installs and copies to vendor dir
     return "client/src/vendor/#{index}/index.js" 
+
+  # adjust vendors that are not installed via direct js reference within bower.json
+  # sources.forEach (vendor, index, vendors)->
+  #   if _.contains vendor, 'ionic' 
+  #     vendors[index] = 'client/src/vendor/ionic/js/ionic.js'
+  #   return
+
   gulp.src sources
     .pipe cached 'vendor:js'
     .pipe concat 'vendor.js'
@@ -152,8 +169,15 @@ gulp.task 'default', ['develop'], ->
 gulp.task 'clean', ->
   gulp.src './dist', read: false
     .pipe clean()
-gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor.js']
+gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor.js', 'client:img', 'ngm:img']
 gulp.task 'develop', ['server:run', 'watch']
+
+gulp.task 'client:img', ->
+  gulp.src 'client/src/img/**/*.{png,jpg,gif,svg,jpeg}'
+    .pipe cached 'client:img'
+    .pipe gulpif not CONFIG.isDev(), imgmin()
+    .pipe remember 'client:img'
+    .pipe gulp.dest 'dist/public/img'
 
 gulp.task 'ngm:app.js', ->
   # tasks = ngmodules [jadeTask, coffeeTask]
@@ -186,12 +210,19 @@ gulp.task 'ngm:app.css', ->
     .pipe gulpif not CONFIG.isDev(), cssmin()
     .pipe gulp.dest 'dist/public/css'
 
+gulp.task 'ngm:img', ->  
+  ngmodules ngmImgTask
+
 gulp.task 'vendor.js', ->
   jsVendorTask()
     .pipe gulpif( not CONFIG.isDev(), uglify() )
     .pipe gulp.dest 'dist/public/vendor'
 
 gulp.task 'vendor.css', ->
+
+gulp.task 'vendor:fonts', ->
+  gulp.src 'client/src/vendor/ionic/fonts/*.{eot,svg,ttf,woff}'
+    .pipe gulp.dest 'dist/public/fonts'
 
 gulp.task 'server:run', ['build'], ->
   server()
@@ -205,15 +236,16 @@ gulp.task 'publish', ->
   # create release (git flow)
   return
 gulp.task 'ngm:docs', ->
-  # generate ng doc reference
+  # generate ng doc reference (/dist/docs?)
   return
 
 gulp.task 'watch', ['build'], ->
   lr = livereload()
-  # currently works only for existing files
+  # glob pattern "/**/src/**/*" doesn't work on new files
+  # @todo: user working pattern ng-modules/**/* and then filter with /**/src/* to filter out modules
   gulp.watch [
     'client/src/js/*.{js,coffee}',
-    'client/src/ng-modules/**/src/**/*.coffee', 
+    'client/src/ng-modules/**/src/**/*.{coffee,jade}', 
     'client/src/ng-modules/ngm-main.coffee'], ['ngm:app.js']
 
   gulp.watch [
@@ -227,4 +259,7 @@ gulp.task 'watch', ['build'], ->
 
     # Full page reload
     # https://github.com/vohof/gulp-livereload/issues/7
-    lr.changed path: 'index.html' 
+    lr.changed path: 'index.html'
+
+  gulp.watch 'client/src/img/**/*.{png,jpg,gif,svg,jpeg}', ['client:img']
+  gulp.watch 'client/src/ng-modules/**/*.{png,jpg,gif,svg,jpeg}', ['ngm:img']

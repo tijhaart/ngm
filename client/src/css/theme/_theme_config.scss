@@ -1,7 +1,10 @@
-@import "../base/config";
+@import 
+  "../base/config",
+  "client/src/vendor/ionic/scss/_variables"
+;
 
 $font-family: 'sans-serif';
-$color: darken($color,  5%);
+$color: $light;
 $line-height: 1.4em;
 
 %btn {

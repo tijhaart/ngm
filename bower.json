@@ -21,6 +21,7 @@
     "underscore-string": "https://raw.github.com/epeli/underscore.string/6778befeabde4207186b81c50af82444930d9ab0/lib/underscore.string.js",
     "jquery": "http://codeorigin.jquery.com/jquery-2.0.3.min.js",
     "angular": "http://code.angularjs.org/1.2.16/angular.js",
+    "ionic": "driftyco/ionic-bower#1.0.0-beta.6",
     "breeze": "https://raw.githubusercontent.com/IdeaBlade/Breeze/4de3eef02b9dcbda39c6671fd2203e317b4a8901/Breeze.Client/Scripts/breeze.debug.js",
     "ui-route": "https://raw.github.com/angular-ui/ui-router/aa0355567b60b2b07dadc5efa42cc4c212b99f2b/release/angular-ui-router.js",
     "angular-resource": "http://code.angularjs.org/1.2.16/angular-resource.js"
