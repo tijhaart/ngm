@@ -1,6 +1,7 @@
 !!!
 html(lang="en")
   head
+    meta(name="viewport", content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width")
     title This is an AngularJS SPA (single page app)
 
     each stylesheet in imports.css
@@ -13,7 +14,7 @@ html(lang="en")
     div.todo-example(ng-include="'todo/todo-example.html'")
 
   each script in imports.js
-    script(src=script)
+    script(src=script, type="text/javascript")
 
   if isDev
     //- change localhost to current system ip address

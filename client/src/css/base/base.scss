@@ -1,6 +1,8 @@
 // @import "config";
-@import "../theme/theme_config";
-// @import "mixins";
+@import 
+  "../theme/theme_config",
+  "client/src/vendor/ionic/scss/ionic"
+;
 
 html {
   font-family: $font-family;

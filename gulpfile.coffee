@@ -30,6 +30,7 @@ livereload  = require 'gulp-livereload'
 cssmin      = require 'gulp-minify-css'
 clean       = require 'gulp-clean'
 imgmin      = require 'gulp-imagemin'
+rename      = require 'gulp-rename'
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
@@ -218,6 +219,7 @@ gulp.task 'vendor.js', ->
     .pipe gulpif( not CONFIG.isDev(), uglify() )
     .pipe gulp.dest 'dist/public/vendor'
 
+# ionic gets included (scss) via client/scr/css/base
 gulp.task 'vendor.css', ->
 
 gulp.task 'vendor:fonts', ->
@@ -242,7 +244,7 @@ gulp.task 'ngm:docs', ->
 gulp.task 'watch', ['build'], ->
   lr = livereload()
   # glob pattern "/**/src/**/*" doesn't work on new files
-  # @todo: user working pattern ng-modules/**/* and then filter with /**/src/* to filter out modules
+  # @todo: use working pattern ng-modules/**/* and then filter with /**/src/* to filter out modules
   gulp.watch [
     'client/src/js/*.{js,coffee}',
     'client/src/ng-modules/**/src/**/*.{coffee,jade}', 

@@ -1,18 +1,20 @@
 @import "theme_config";
 @import "_partial";
 
-$prefix: 'todo';
+// ns: namespace
+$ns: 'todo';
 $base: todo;
-$local-img: url("../img/todo/banana-leaf.jpg");
-$global-img: url("../img/banana-large.jpg");
 
-@function image-url($image){
+@function img-url($image){
   @return url("../img/#{$base}/#{$image}");
 }
 
-.#{$prefix}-example {
+$local-img: img-url("banana-leaf.jpg");
+$global-img: url("../img/banana-large.jpg");
 
-  background: image-url("banana-leaf.jpg") no-repeat;
+.#{$ns}-example {
+
+  background: $local-img no-repeat;
   background-size: auto 100%;
 
   input[type="text"] {
@@ -20,9 +22,14 @@ $global-img: url("../img/banana-large.jpg");
     padding: 10px;
     border-radius: 2px;
   }
+
+  h2 {
+    color: $light;
+    text-shadow: 2px 2px $dark;
+  }
 }
 
-.btn-#{$prefix} {
+.btn-#{$ns} {
   // @include btn;
   
   @extend %btn;
