@@ -134,12 +134,10 @@ sassThemeTask = ->
 ngmImgTask = (ngmodule)->
   path = Path.relative './client/src/ng-modules/', ngmodule.path
   path = path.substr(0,path.lastIndexOf '/src')
-
   gulp.src ngmodule.path + '/img/*.{png,jpg,gif,svg,jpeg}'
     .pipe gulp.dest 'dist/public/img/' + path
 
 jsVendorTask = ->
-
   paths =
     "lodash":             '/dist/lodash.js'
     "underscore.string":  '/lib/underscore.string.js'
@@ -263,7 +261,6 @@ gulp.task 'watch', ['build'], ->
 
   gulp.watch 'dist/public/**/*.{js,css}', (change)->
     log.info "[#{change.type}] #{Path.relative './', change.path}"
-
     # Full page reload
     # https://github.com/vohof/gulp-livereload/issues/7
     lr.changed path: 'index.html'
