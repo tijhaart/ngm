@@ -150,9 +150,17 @@ jsVendorTask = ->
 
   bower = require './bower.json'
   # this will maintain the order set in in bower.json
-  sources = _.map bower.dependencies, (version, index)->
+  sources = _.reduce bower.dependencies, (sources, version, index)->
     # will also include local vendor scripts b/c bower installs and copies to vendor dir
-    return Path.join 'client/src/vendor', index, paths[index]
+    sources.push Path.join 'client/src/vendor', index, paths[index]
+
+    if index == 'ionic'
+      sources.push Path.join 'client/src/vendor', index, '/js/ionic-angular.js'
+
+    return sources
+  , []
+
+  console.log sources
 
   gulp.src sources
     .pipe cached 'vendor:js'

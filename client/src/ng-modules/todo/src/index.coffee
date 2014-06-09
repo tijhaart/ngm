@@ -5,4 +5,4 @@
  * @description [description]
  * 
 ###
-module = do ( module = angular.module('todo', []) )-> return module
+module = do ( module = angular.module('todo', ['ionic']) )-> return module
