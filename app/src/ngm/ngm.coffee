@@ -31,7 +31,7 @@ module.exports = (options, imports, register)->
     css: []
     js: []
 
-  app.get '/app', routes.app(imports:staticImports, isDev: isDev)
+  app.get '/app', routes.app(imports:staticImports, isDev: isDev, isHybridBuild:false)
 
 
   register null

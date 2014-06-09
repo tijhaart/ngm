@@ -3,10 +3,3 @@
   "../theme/theme_config",
   "client/src/vendor/ionic/scss/ionic"
 ;
-
-html {
-  font-family: $font-family;
-  color: $color;
-  line-height: $line-height;
-  background: lighten($color, 5%);
-}

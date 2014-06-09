@@ -31,6 +31,7 @@ cssmin      = require 'gulp-minify-css'
 clean       = require 'gulp-clean'
 imgmin      = require 'gulp-imagemin'
 rename      = require 'gulp-rename'
+gettext     = require 'gulp-angular-gettext'
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
@@ -156,11 +157,8 @@ jsVendorTask = ->
 
     if index == 'ionic'
       sources.push Path.join 'client/src/vendor', index, '/js/ionic-angular.js'
-
     return sources
   , []
-
-  console.log sources
 
   gulp.src sources
     .pipe cached 'vendor:js'
@@ -181,7 +179,7 @@ gulp.task 'default', ['develop'], ->
 gulp.task 'clean', ->
   gulp.src './dist', read: false
     .pipe clean()
-gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor:js', 'client:img', 'ngm:img']
+gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor:js','vendor:fonts', 'client:img', 'ngm:img']
 gulp.task 'develop', ['server:run', 'watch']
 
 gulp.task 'client:img', ->
@@ -267,7 +265,9 @@ gulp.task 'watch', ['build'], ->
 
   gulp.watch ['client/src/vendor/**/*.js'], ['vendor:js']
 
-  gulp.watch 'dist/public/**/*.{js,css}', (change)->
+  gulp.watch [
+    'dist/public/**/*.{js,css}',
+    'app/{src,plugins}/**/*'], (change)->
     log.info "[#{change.type}] #{Path.relative './', change.path}"
     # Full page reload
     # https://github.com/vohof/gulp-livereload/issues/7
