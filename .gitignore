@@ -51,9 +51,4 @@ config/local.js
 
 selenium
 
-
-# Allow
-
-!node_modules/grunt-angular-templates
-!node_modules/grunt-angular-templates/*
-!node_modules/grunt-angular-templates/**/*
+client/src/vendor

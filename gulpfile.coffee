@@ -139,17 +139,22 @@ ngmImgTask = (ngmodule)->
     .pipe gulp.dest 'dist/public/img/' + path
 
 jsVendorTask = ->
+
+  paths =
+    "lodash":             '/dist/lodash.js'
+    "underscore.string":  '/lib/underscore.string.js'
+    "jquery":             '/dist/jquery.js'
+    "angular":            '/angular.js'
+    "angular-animate":    '/angular-animate.js'
+    "angular-sanitize":   '/angular-sanitize.js'
+    "angular-ui-router":  '/release/angular-ui-router.js'
+    "ionic":              '/js/ionic.js'
+
   bower = require './bower.json'
   # this will maintain the order set in in bower.json
-  sources = _.map bower.dependencies, (vendor, index)->
+  sources = _.map bower.dependencies, (version, index)->
     # will also include local vendor scripts b/c bower installs and copies to vendor dir
-    return "client/src/vendor/#{index}/index.js" 
-
-  # adjust vendors that are not installed via direct js reference within bower.json
-  # sources.forEach (vendor, index, vendors)->
-  #   if _.contains vendor, 'ionic' 
-  #     vendors[index] = 'client/src/vendor/ionic/js/ionic.js'
-  #   return
+    return Path.join 'client/src/vendor', index, paths[index]
 
   gulp.src sources
     .pipe cached 'vendor:js'
@@ -170,7 +175,7 @@ gulp.task 'default', ['develop'], ->
 gulp.task 'clean', ->
   gulp.src './dist', read: false
     .pipe clean()
-gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor.js', 'client:img', 'ngm:img']
+gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor:js', 'client:img', 'ngm:img']
 gulp.task 'develop', ['server:run', 'watch']
 
 gulp.task 'client:img', ->
@@ -214,7 +219,7 @@ gulp.task 'ngm:app.css', ->
 gulp.task 'ngm:img', ->  
   ngmodules ngmImgTask
 
-gulp.task 'vendor.js', ->
+gulp.task 'vendor:js', ->
   jsVendorTask()
     .pipe gulpif( not CONFIG.isDev(), uglify() )
     .pipe gulp.dest 'dist/public/vendor'
@@ -254,7 +259,7 @@ gulp.task 'watch', ['build'], ->
     'client/src/ng-modules/**/src/styles/*.scss',
     'client/src/css/**/*.scss'], ['ngm:app.css']
 
-  gulp.watch ['client/src/vendor/**/*.js'], ['vendor.js']
+  gulp.watch ['client/src/vendor/**/*.js'], ['vendor:js']
 
   gulp.watch 'dist/public/**/*.{js,css}', (change)->
     log.info "[#{change.type}] #{Path.relative './', change.path}"
