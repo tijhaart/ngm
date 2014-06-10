@@ -19,11 +19,25 @@ do (module)->
     $scope.projects = Projects.all()
     $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()]
 
-    $scope.newProject = ->
-      projectTitle = prompt 'Project title'
+    $scope.newProjectModal = newProjectModal = {}
 
-      if projectTitle then createProject projectTitle
+    $ionicModal.fromTemplateUrl 'todo/modal/new-project.html', (modal)->
+      newProjectModal = modal
+      return
+    , 
+      scope: $scope
+
+    $scope.newProject = ->
+      newProjectModal.show()
       
+      return
+    $scope.closeNewProject = ->
+      newProjectModal.hide()
+      return
+
+    $scope.createProject = (project)->
+      if project and project.title then createProject project.title
+      newProjectModal.hide()
       return
 
     $scope.selectProject = (project, index)->
@@ -31,15 +45,10 @@ do (module)->
       Projects.setLastActiveIndex index
       $ionicSideMenuDelegate.toggleLeft false 
 
-    $scope.tasks = [
-        title: 'Collect coins'
-      ,
-        title: 'Eat mushrooms'
-      ,
-        title: 'Get high enough to grab the flag'
-      ,
-        title: 'Find the mushrooms'
-    ]
+    $scope.removeProjects = ->
+      Projects.removeProjects()
+      $scope.projects = null
+      $scope.activeProject = null
 
     $ionicModal.fromTemplateUrl 'todo/new-task.html', (modal)->
       $scope.taskModal = modal
@@ -69,12 +78,7 @@ do (module)->
       $ionicSideMenuDelegate.toggleLeft()
 
     $timeout ->
-      if $scope.projects.length is 0
-        loop
-          projectTitle = prompt("Your first project title:")
-          if projectTitle
-            createProject projectTitle
-            break
+      if $scope.projects.length is 0 then $scope.newProject()
       return
 
     return @

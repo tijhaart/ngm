@@ -77,10 +77,12 @@ ngmodules.join = (tasks)-> (es.concat.apply null, tasks)
 
 ngmMainTask = ->
   gulp.src './client/src/ng-modules/ngm-main.coffee'
+    .pipe plumber()
     .pipe coffee()
 
 coffeeTask = (ngmodule)->
   gulp.src ngmodule.path + '/**/*.coffee'
+    .pipe plumber()
     .pipe cached ngmodule.name + ':coffee'
     .pipe coffee bare:true
     .pipe nginject(token:'di')
@@ -93,6 +95,7 @@ coffeeTask = (ngmodule)->
 jadeTask = (ngmodule)->
   gulp.src ngmodule.path + '/templates/**/*.jade'
     # .pipe cached ngmodule.name + ':jade'
+    .pipe plumber()
     .pipe jade( pretty: false )
     .pipe ngtpl
       filename: ngmodule.dirName + '.tpl.js'
@@ -171,6 +174,7 @@ jsTask = ->
 
   coffeeJs = ->
     gulp.src 'client/src/js/*.coffee'
+      .pipe plumber()
       .pipe coffee( bare: true )
 
   es.concat js(), coffeeJs()

@@ -1,1 +1,30 @@
-//- @example: $templateCache.get "todo/exampleTodo.html"
+//- @example: $templateCache.get "todo/example-todo.html"
+ion-side-menus
+  ion-side-menu-content
+    ion-header-bar.bar-dark.bar
+      button.button.button-icon(ng-click="toggleProjects()")
+        i.icon.ion-navicon
+      h1.title {{ activeProject.title }}
+      
+      button.button.button-icon(ng-click="removeProjects()")
+        i.icon.ion-ios7-trash-outline
+      button.button.button-icon(ng-click="newTask()")
+        i.icon.ion-compose
+
+    ion-content
+      ion-list
+        ion-item(ng-repeat="task in activeProject.tasks")
+          | {{ task.title }}
+
+  ion-side-menu(side="left")
+    ion-header-bar.bar-dark
+      h1.title Projects {{ activeProject.length }}
+      button.button.button-icon.ion-plus(ng-click="newProject()")
+
+    ion-content(scroll="false")
+      ion-list
+        ion-item(
+          ng-repeat="project in projects", 
+          ng-class="{active: activeProject === project}",
+          ng-click="selectProject(project, $index)")
+          | {{ project.title }}

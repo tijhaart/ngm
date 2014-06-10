@@ -22,6 +22,10 @@ do (module)->
       title: projectTitle
       tasks: []
 
+    removeProjects: ->
+      delete $window.localStorage['projects']
+      delete $window.localStorage['lastActiveProject']
+
     getLastActiveIndex: ->
        return parseInt($window.localStorage['lastActiveProject'], 10) or 0
        

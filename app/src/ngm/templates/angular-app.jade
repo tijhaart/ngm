@@ -8,50 +8,17 @@ html(lang="en")
     each stylesheet in imports.css
       link(rel="stylesheet", href=stylesheet)
 
-  body(ng-controller="TodoCtrl")
+  body
 
-
-    //- ion-content(padding="true")
-
-    ion-side-menus
-      ion-side-menu-content
-        ion-header-bar.bar-dark.bar
-          button.button.button-icon(ng-click="toggleProjects()")
-            i.icon.ion-navicon
-          //- h1.title Todo ({{ tasks.length }})
-          h1.title {{ activeProject.title }}
-
-          button.button.button-icon(ng-click="newTask()")
-            i.icon.ion-compose
-
-        ion-content
-          ion-list
-            ion-item(ng-repeat="task in activeProject.tasks")
-              {{ task.title }}
-
-      ion-side-menu(side="left")
-        ion-header-bar.bar-dark
-          h1.title Projects {{ activeProject.length }}
-          button.button.button-icon.ion-plus(ng-click="newProject()")
-
-        ion-content(scroll="false")
-          ion-list
-            ion-item(
-              ng-repeat="project in projects", 
-              ng-class="{active: activeProject === project}",
-              ng-click="selectProject(project, $index)")
-              {{ project.title }}
-
-
-
-
+    div(todos)
 
 
   each script in imports.js
     script(src=script, type="text/javascript")
 
   if isDev
-    //- change localhost to current system ip address
+    //- change localhost to current system ip address for livereloading
+    //- on other devices within the same network
     script(src="//localhost:35729/livereload.js")
   else if isHybridBuild
     script(src="cordova.js")
