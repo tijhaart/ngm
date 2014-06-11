@@ -28,7 +28,8 @@ do (module)->
       scope: $scope
 
     $scope.newProject = ->
-      newProjectModal.show()
+      console.log 'calling newProject'
+      # newProjectModal.show()
       
       return
     $scope.closeNewProject = ->
@@ -76,6 +77,8 @@ do (module)->
 
     $scope.toggleProjects = ->
       $ionicSideMenuDelegate.toggleLeft()
+
+    # $scope.newProject()
 
     $timeout ->
       if $scope.projects.length is 0 then $scope.newProject()

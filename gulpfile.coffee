@@ -156,7 +156,9 @@ jsVendorTask = ->
   # this will maintain the order set in in bower.json
   sources = _.reduce bower.dependencies, (sources, version, index)->
     # will also include local vendor scripts b/c bower installs and copies to vendor dir
-    sources.push Path.join 'client/src/vendor', index, paths[index]
+
+    if paths[index]
+      sources.push Path.join 'client/src/vendor', index, paths[index]
 
     if index == 'ionic'
       sources.push Path.join 'client/src/vendor', index, '/js/ionic-angular.js'
