@@ -6,6 +6,7 @@ es          = require 'event-stream'
 _           = require 'lodash'
 Path        = require 'path'
 yargs       = require 'yargs'
+streamqueue = require 'streamqueue'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
@@ -21,7 +22,6 @@ jade        = require 'gulp-jade'
 ngtpl       = require 'gulp-angular-templatecache'
 sass        = require 'gulp-sass'
 prepend     = require('gulp-insert').prepend
-streamqueue = require 'streamqueue'
 plumber     = require 'gulp-plumber'
 uglify      = require 'gulp-uglify'
 gulpif      = require 'gulp-if'
@@ -33,6 +33,7 @@ imgmin      = require 'gulp-imagemin'
 rename      = require 'gulp-rename'
 gettext     = require 'gulp-angular-gettext'
 karma       = require 'gulp-karma'
+protractor  = (require 'gulp-protractor').protractor
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
@@ -248,10 +249,21 @@ gulp.task 'server:run', ['build'], ->
 gulp.task 'test:unit', ->
   gulp.src './fake-path/so-plugin/uses-config'
     .pipe karma 
-      configFile: 'karma.conf.coffee'
+      configFile: './test/karma.conf.coffee'
       action: 'watch'
     .on 'error', (err)->
       console.log err
+
+# e2e: End to end or integration testing
+# todo: run tests with a production task that set the NODE_ENV to production 
+#       which will in turn should minify/optimize the static files
+gulp.task 'test:e2e', ['develop'], ->
+  gulp.src './foo'
+    .pipe protractor
+      configFile: 'test/protractor.conf.js'
+    .on 'error', (err)->
+      throw Error err
+
 
 gulp.task 'publish', ->
   # set env to production

@@ -27,14 +27,10 @@
     "gulp-plumber": "~0.6.1",
     "gulp-remember": "^0.2.0",
     "gulp-sass": "~0.7.1",
-    "gulp-sweetjs": "~0.3.0",
     "gulp-util": "~2.2.14",
-    "gulp-watch": "~0.6.3",
     "gulp-wrap": "~0.3.0",
-    "jasmine-given": "~2.6.0",
-    "lazypipe": "~0.2.1",
+    "jasmine-given": "~2.6.2",
     "lodash": "~2.4.1",
-    "multistream-merge": "~0.1.0",
     "streamqueue": "0.0.6",
     "through": "~2.3.4",
     "through2": "~0.4.1",
@@ -51,7 +47,9 @@
     "gulp-karma": "0.0.4",
     "karma": "~0.12.16",
     "karma-jasmine": "~0.1.5",
-    "karma-chrome-launcher": "~0.1.4"
+    "karma-chrome-launcher": "~0.1.4",
+    "gulp-protractor": "0.0.7",
+    "protractor": "~0.24.1"
   },
   "dependencies": {
     "coffee-script": "~1.7.1",
