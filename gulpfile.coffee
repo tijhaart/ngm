@@ -32,6 +32,7 @@ clean       = require 'gulp-clean'
 imgmin      = require 'gulp-imagemin'
 rename      = require 'gulp-rename'
 gettext     = require 'gulp-angular-gettext'
+karma       = require 'gulp-karma'
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
@@ -243,6 +244,14 @@ gulp.task 'vendor:fonts', ->
 
 gulp.task 'server:run', ['build'], ->
   server()
+
+gulp.task 'test:unit', ->
+  gulp.src './fake-path/so-plugin/uses-config'
+    .pipe karma 
+      configFile: 'karma.conf.coffee'
+      action: 'watch'
+    .on 'error', (err)->
+      console.log err
 
 gulp.task 'publish', ->
   # set env to production

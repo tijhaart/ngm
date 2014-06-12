@@ -7,12 +7,7 @@ describe 'todo', ->
     return
 
   describe 'call newProject when there are no projects', ->
-    Given ->      
-      spyOn @scope, 'newProject'
-      return
-    # When -> @scope.projects.length == 0
-    Then -> expect(@scope.newProject).toHaveBeenCalled()
 
-    return
+  	Then -> expect(@scope.projects.length).toEqual(0)
 
   return
