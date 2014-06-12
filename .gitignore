@@ -1,13 +1,4 @@
 ########################
-# sails
-########################
-.sails
-.waterline
-.rigging
-.tmp
-
-
-########################
 # node.js / npm
 ########################
 lib-cov
@@ -39,7 +30,8 @@ nbproject
 sublime-project
 *.sublime-project
 *.sublime-workspace
-
+client/src/vendor
+slush-ngmodules
 
 ########################
 # local config
@@ -47,8 +39,3 @@ sublime-project
 config/local.js
 
 
-# Custom
-
-selenium
-
-client/src/vendor
