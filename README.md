@@ -18,7 +18,7 @@ Requires nodejs and npm to be installed.
 
 http://teamgaslight.com/blog/getting-started-with-protractor-and-page-objects-for-angularjs-e2e-testing
 
-# Licencse
+# License
 
 MIT
 
