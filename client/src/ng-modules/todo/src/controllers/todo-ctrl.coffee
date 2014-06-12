@@ -28,10 +28,9 @@ do (module)->
       scope: $scope
 
     $scope.newProject = ->
-      console.log 'calling newProject'
-      # newProjectModal.show()
-      
+      newProjectModal.show()
       return
+
     $scope.closeNewProject = ->
       newProjectModal.hide()
       return
@@ -45,6 +44,7 @@ do (module)->
       $scope.activeProject = project
       Projects.setLastActiveIndex index
       $ionicSideMenuDelegate.toggleLeft false 
+      return
 
     $scope.removeProjects = ->
       Projects.removeProjects()
