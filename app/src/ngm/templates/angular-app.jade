@@ -1,6 +1,7 @@
 !!!
 html(lang="en")
   head
+    meta(charset="utf-8")
     meta(name="viewport", content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width")
     title This is an AngularJS SPA (single page app)
 
@@ -8,16 +9,18 @@ html(lang="en")
       link(rel="stylesheet", href=stylesheet)
 
   body
-    h1 AngularJS SPA
-    p AngularJS is a javascript framework built by Google.
 
-    div.todo-example(ng-include="'todo/todo-example.html'")
+    div(todos)
+
 
   each script in imports.js
     script(src=script, type="text/javascript")
 
   if isDev
-    //- change localhost to current system ip address
+    //- change localhost to current system ip address for livereloading
+    //- on other devices within the same network
     script(src="//localhost:35729/livereload.js")
+  else if isHybridBuild
+    script(src="cordova.js")
   else
     //- analytics

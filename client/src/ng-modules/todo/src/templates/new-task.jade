@@ -1,0 +1,15 @@
+//- @example: $templateCache.get "todo/new-task.html"
+div.modal
+  ion-header-bar.bar-secondary
+    h1.title New task
+
+    button.button.button-clear.button-positive(ng-click="closeNewTask()") Cancel
+
+  ion-content
+    form(ng-submit="createTask(task)")
+      div.list
+        label.item.item-input
+          input(type="text", placeholder="What needs to be done?", ng-model="task.title")
+      div.padding
+        button.button.button-block.button-positive(type="submit") Create task
+

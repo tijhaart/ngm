@@ -6,6 +6,7 @@ es          = require 'event-stream'
 _           = require 'lodash'
 Path        = require 'path'
 yargs       = require 'yargs'
+streamqueue = require 'streamqueue'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
@@ -21,7 +22,6 @@ jade        = require 'gulp-jade'
 ngtpl       = require 'gulp-angular-templatecache'
 sass        = require 'gulp-sass'
 prepend     = require('gulp-insert').prepend
-streamqueue = require 'streamqueue'
 plumber     = require 'gulp-plumber'
 uglify      = require 'gulp-uglify'
 gulpif      = require 'gulp-if'
@@ -31,6 +31,9 @@ cssmin      = require 'gulp-minify-css'
 clean       = require 'gulp-clean'
 imgmin      = require 'gulp-imagemin'
 rename      = require 'gulp-rename'
+gettext     = require 'gulp-angular-gettext'
+karma       = require 'gulp-karma'
+protractor  = (require 'gulp-protractor').protractor
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
@@ -76,10 +79,12 @@ ngmodules.join = (tasks)-> (es.concat.apply null, tasks)
 
 ngmMainTask = ->
   gulp.src './client/src/ng-modules/ngm-main.coffee'
+    .pipe plumber()
     .pipe coffee()
 
 coffeeTask = (ngmodule)->
   gulp.src ngmodule.path + '/**/*.coffee'
+    .pipe plumber()
     .pipe cached ngmodule.name + ':coffee'
     .pipe coffee bare:true
     .pipe nginject(token:'di')
@@ -92,6 +97,7 @@ coffeeTask = (ngmodule)->
 jadeTask = (ngmodule)->
   gulp.src ngmodule.path + '/templates/**/*.jade'
     # .pipe cached ngmodule.name + ':jade'
+    .pipe plumber()
     .pipe jade( pretty: false )
     .pipe ngtpl
       filename: ngmodule.dirName + '.tpl.js'
@@ -150,9 +156,16 @@ jsVendorTask = ->
 
   bower = require './bower.json'
   # this will maintain the order set in in bower.json
-  sources = _.map bower.dependencies, (version, index)->
+  sources = _.reduce bower.dependencies, (sources, version, index)->
     # will also include local vendor scripts b/c bower installs and copies to vendor dir
-    return Path.join 'client/src/vendor', index, paths[index]
+
+    if paths[index]
+      sources.push Path.join 'client/src/vendor', index, paths[index]
+
+    if index == 'ionic'
+      sources.push Path.join 'client/src/vendor', index, '/js/ionic-angular.js'
+    return sources
+  , []
 
   gulp.src sources
     .pipe cached 'vendor:js'
@@ -165,6 +178,7 @@ jsTask = ->
 
   coffeeJs = ->
     gulp.src 'client/src/js/*.coffee'
+      .pipe plumber()
       .pipe coffee( bare: true )
 
   es.concat js(), coffeeJs()
@@ -173,7 +187,7 @@ gulp.task 'default', ['develop'], ->
 gulp.task 'clean', ->
   gulp.src './dist', read: false
     .pipe clean()
-gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor:js', 'client:img', 'ngm:img']
+gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor:js','vendor:fonts', 'client:img', 'ngm:img']
 gulp.task 'develop', ['server:run', 'watch']
 
 gulp.task 'client:img', ->
@@ -232,6 +246,25 @@ gulp.task 'vendor:fonts', ->
 gulp.task 'server:run', ['build'], ->
   server()
 
+gulp.task 'test:unit', ->
+  gulp.src './fake-path/so-plugin/uses-config'
+    .pipe karma 
+      configFile: './test/karma.conf.coffee'
+      action: 'watch'
+    .on 'error', (err)->
+      console.log err
+
+# e2e: End to end or integration testing
+# todo: run tests with a production task that set the NODE_ENV to production 
+#       which will in turn should minify/optimize the static files
+gulp.task 'test:e2e', ['develop'], ->
+  gulp.src './foo'
+    .pipe protractor
+      configFile: 'test/protractor.conf.js'
+    .on 'error', (err)->
+      throw Error err
+
+
 gulp.task 'publish', ->
   # set env to production
   # build
@@ -259,7 +292,9 @@ gulp.task 'watch', ['build'], ->
 
   gulp.watch ['client/src/vendor/**/*.js'], ['vendor:js']
 
-  gulp.watch 'dist/public/**/*.{js,css}', (change)->
+  gulp.watch [
+    'dist/public/**/*.{js,css}',
+    'app/{src,plugins}/**/*'], (change)->
     log.info "[#{change.type}] #{Path.relative './', change.path}"
     # Full page reload
     # https://github.com/vohof/gulp-livereload/issues/7
