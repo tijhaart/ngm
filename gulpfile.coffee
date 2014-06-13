@@ -7,6 +7,7 @@ _           = require 'lodash'
 Path        = require 'path'
 yargs       = require 'yargs'
 streamqueue = require 'streamqueue'
+dgeni       = require 'dgeni'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
@@ -21,7 +22,6 @@ remember    = require 'gulp-remember'
 jade        = require 'gulp-jade'
 ngtpl       = require 'gulp-angular-templatecache'
 sass        = require 'gulp-sass'
-prepend     = require('gulp-insert').prepend
 plumber     = require 'gulp-plumber'
 uglify      = require 'gulp-uglify'
 gulpif      = require 'gulp-if'
@@ -33,7 +33,8 @@ imgmin      = require 'gulp-imagemin'
 rename      = require 'gulp-rename'
 gettext     = require 'gulp-angular-gettext'
 karma       = require 'gulp-karma'
-protractor  = (require 'gulp-protractor').protractor
+protractor  = require('gulp-protractor').protractor
+prepend     = require('gulp-insert').prepend
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
@@ -273,9 +274,12 @@ gulp.task 'publish', ->
   # commit
   # create release (git flow)
   return
+
 gulp.task 'ngm:docs', ->
   # generate ng doc reference (/dist/docs?)
-  return
+
+  # dgeni 'docs/dgeni.conf.js'
+  #   .generateDocs()
 
 gulp.task 'watch', ['build'], ->
   lr = livereload()
