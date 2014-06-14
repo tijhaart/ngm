@@ -1,14 +1,18 @@
 //- @example: $templateCache.get "todo/modal/new-project.html"
 div.modal
   ion-header-bar.bar-secondary
-    h1.title New project
+    h1.title(translate) New project
 
-    button.button.button-clear.button-positive(ng-click="closeNewProject()") Cancel
+    button.button.button-clear.button-positive(
+      ng-click="closeNewProject()"
+      translate) Cancel
 
   ion-content
     form(ng-submit="createProject(project)")
       div.list
         label.item.item-input
-          input(type="text", placeholder="Project title", ng-model="project.title")
+          input(type="text", placeholder="{{ 'Project title' | translate }}", ng-model="project.title")
       div.padding
-        button.button.button-block.button-positive(type="submit") Create project
+        button.button.button-block.button-positive(
+          type="submit"
+          translate) Create project

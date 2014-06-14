@@ -153,6 +153,7 @@ jsVendorTask = ->
     "angular-sanitize":   '/angular-sanitize.js'
     "angular-ui-router":  '/release/angular-ui-router.js'
     "ionic":              '/js/ionic.js'
+    "angular-gettext":    '/dist/angular-gettext.js'
 
   bower = require './bower.json'
   # this will maintain the order set in in bower.json
@@ -264,6 +265,17 @@ gulp.task 'test:e2e', ['develop'], ->
     .on 'error', (err)->
       throw Error err
 
+gulp.task 'ngm:i10n', ->
+  gulp.src 'client/src/**/*.jade'
+    .pipe jade pretty:false
+    .pipe gettext.extract 'template.pot'
+    .pipe gulp.dest 'lang/pot'
+
+gulp.task 'ngm:i18n', ->
+  gulp.src 'lang/po/*.po'
+    .pipe gettext.compile format: 'json'
+    .pipe gulp.dest 'dist/public/lang'
+
 
 gulp.task 'publish', ->
   # set env to production
@@ -274,9 +286,7 @@ gulp.task 'publish', ->
   # commit
   # create release (git flow)
   return
-
 gulp.task 'ngm:docs', ->
-
 
 gulp.task 'watch', ['build'], ->
   lr = livereload()

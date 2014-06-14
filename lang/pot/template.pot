@@ -1,0 +1,47 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/new-task.html
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/modal/new-project.html
+msgid "Cancel"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/modal/new-project.html
+msgid "Create project"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/new-task.html
+msgid "Create task"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/modal/new-project.html
+msgid "New project"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/new-task.html
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+msgid "New task"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/modal/new-project.html
+msgid "Project title"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+msgid "Projects ({{ activeProject.tasks.length }})"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+msgid "Remove projects"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+msgid "Toggle projects"
+msgstr ""
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/new-task.html
+msgid "What needs to be done?"
+msgstr ""

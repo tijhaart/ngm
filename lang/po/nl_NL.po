@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl\n"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/new-task.html
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/modal/new-project.html
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/modal/new-project.html
+msgid "Create project"
+msgstr "Project aanmaken"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/new-task.html
+msgid "Create task"
+msgstr "Taak aanmaken"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/modal/new-project.html
+msgid "New project"
+msgstr "Nieuw project"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/new-task.html
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+msgid "New task"
+msgstr "Nieuwe taak"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/modal/new-project.html
+msgid "Project title"
+msgstr "Projecttitel"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+msgid "Projects ({{ activeProject.tasks.length }})"
+msgstr "Projecten ({{ activeProject.tasks.length }})"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+msgid "Remove projects"
+msgstr "Projecten verwijderen"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
+msgid "Toggle projects"
+msgstr "Schakel projecten"
+
+#: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/new-task.html
+msgid "What needs to be done?"
+msgstr "Wat moet er gebeuren?"

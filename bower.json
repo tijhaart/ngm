@@ -26,6 +26,7 @@
     "angular-ui-router": "~0.2.10",
     "ionic": "driftyco/ionic-bower#1.0.0-beta.6",
     "angular-mocks": "~1.2.17",
-    "jasmine-given": "~2.6.2"
+    "jasmine-given": "~2.6.2",
+    "angular-gettext": "~0.2.9"
   }
 }
