@@ -31,7 +31,7 @@ msgid "Project title"
 msgstr ""
 
 #: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html
-msgid "Projects ({{ activeProject.tasks.length }})"
+msgid "Projects ({{ projects.length }})"
 msgstr ""
 
 #: /home/tijhaart/workspace/ngmgulp/client/src/ng-modules/todo/src/templates/todo-example.html

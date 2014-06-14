@@ -4,7 +4,7 @@ ion-side-menus
     ion-header-bar.bar-dark.bar
       button.button.button-icon(ng-click="toggleProjects()", title="{{ 'Toggle projects' | translate }}")
         i.icon.ion-navicon
-      h1.title {{ activeProject.title }}
+      h1.title {{ activeProject.title }} ({{ activeProject.tasks.length }})
       
       button.button.button-icon(ng-click="removeProjects()", title="{{ 'Remove projects' | translate }}")
         i.icon.ion-ios7-trash-outline
@@ -18,7 +18,7 @@ ion-side-menus
 
   ion-side-menu(side="left")
     ion-header-bar.bar-dark
-      h1.title(translate) Projects ({{ activeProject.tasks.length }})
+      h1.title(translate) Projects ({{ projects.length }})
       button.button.button-icon.ion-plus(ng-click="newProject()", title="{{ 'New project' | translate }}")
 
     ion-content(scroll="false")
