@@ -7,7 +7,6 @@ _           = require 'lodash'
 Path        = require 'path'
 yargs       = require 'yargs'
 streamqueue = require 'streamqueue'
-dgeni       = require 'dgeni'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
@@ -271,15 +270,13 @@ gulp.task 'publish', ->
   # build
   # test
   # bump semver
+  # generate docs
   # commit
   # create release (git flow)
   return
 
 gulp.task 'ngm:docs', ->
-  # generate ng doc reference (/dist/docs?)
 
-  # dgeni 'docs/dgeni.conf.js'
-  #   .generateDocs()
 
 gulp.task 'watch', ['build'], ->
   lr = livereload()
