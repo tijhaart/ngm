@@ -1,0 +1,12 @@
+.todo-example {
+
+}
+
+.todo-tasks {
+  .checked {
+    .item-content span {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+  }
+}

@@ -13,7 +13,7 @@ module = do ( module = angular.module('todo', ['ionic', 'gettext']) )->
       gettextCatalog.setStrings 'nl', res.data['nl']
       gettextCatalog.currentLanguage = 'nl'
 
-    gettextCatalog.debug = true
+    gettextCatalog.debug = false
 
     return
 

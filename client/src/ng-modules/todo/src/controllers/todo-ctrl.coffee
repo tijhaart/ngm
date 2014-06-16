@@ -9,7 +9,16 @@ do (module)->
   ###
   module.controller 'TodoCtrl', di ($scope, $ionicModal, Projects, $timeout, $ionicSideMenuDelegate)->
 
+    defaults =
+      projects: [
+          title: 'Supper', tasks: ['Get ingredients', 'Prepare supper', 'Lay the table', 'Invite guests to table', 'Enjoy supper', 'Clear the table', 'Wash the dishes']
+        ,
+          title: 'Movie', tasks: ['Get tickets', 'Go to theater', 'Watch movie', 'Enjoy break', 'Resume watching the movie', 'Go home']
+      ]
+
     createProject = (projectTitle)->
+      $scope.projects = $scope.projects or []
+
       newProject = Projects.newProject projectTitle
       $scope.projects.push newProject
       Projects.save $scope.projects
@@ -18,8 +27,25 @@ do (module)->
 
     $scope.projects = Projects.all()
     $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()]
-
     $scope.newProjectModal = newProjectModal = {}
+
+    $scope.log = ->
+      console.log arguments
+
+    $scope.restoreDefaults = ->
+      Projects.removeProjects()
+      $scope.projects = []
+
+      _.each defaults.projects, (project, index)->
+
+        createProject project.title
+        $scope.activeProject = Projects.all()[index]
+        project.tasks.forEach (task)-> $scope.createTask title: task
+
+      console.log Projects.all()
+
+    $scope.saveProjects = ->
+      Projects.save($scope.projects)
 
     $ionicModal.fromTemplateUrl 'todo/modal/new-project.html', (modal)->
       newProjectModal = modal
@@ -62,6 +88,7 @@ do (module)->
 
       $scope.activeProject.tasks.push 
         title: task.title
+        done: false
       $scope.taskModal.hide()
       Projects.save $scope.projects
       task.title = null

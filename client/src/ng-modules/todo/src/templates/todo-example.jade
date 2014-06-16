@@ -4,21 +4,31 @@ ion-side-menus
     ion-header-bar.bar-dark.bar
       button.button.button-icon(ng-click="toggleProjects()", title="{{ 'Toggle projects' | translate }}")
         i.icon.ion-navicon
-      h1.title {{ activeProject.title }} ({{ activeProject.tasks.length }})
+      h1.title
+        | {{ activeProject.title }} 
+        span(ng-show="activeProject.tasks.length") ({{ activeProject.tasks.length }})
       
       button.button.button-icon(ng-click="removeProjects()", title="{{ 'Remove projects' | translate }}")
         i.icon.ion-ios7-trash-outline
+      button.button(translate, ng-click="restoreDefaults()") Restore defaults
       button.button.button-icon(ng-click="newTask()", title="{{ 'New task' | translate }}")
         i.icon.ion-compose
 
     ion-content
-      ion-list
-        ion-item(ng-repeat="task in activeProject.tasks")
+      ion-list.todo-tasks
+        ion-checkbox(
+          ng-repeat="task in activeProject.tasks",
+          ng-change="saveProjects()",
+          ng-class="{checked: task.done}",
+          ng-model="task.done",
+          ng-checked="task.done")
           | {{ task.title }}
 
   ion-side-menu(side="left")
     ion-header-bar.bar-dark
-      h1.title(translate) Projects ({{ projects.length }})
+      h1.title 
+        | {{ 'Projects' | translate }} 
+        span(ng-show="projects.length") ({{ projects.length }})
       button.button.button-icon.ion-plus(ng-click="newProject()", title="{{ 'New project' | translate }}")
 
     ion-content(scroll="false")
