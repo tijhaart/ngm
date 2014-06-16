@@ -7,6 +7,7 @@ _           = require 'lodash'
 Path        = require 'path'
 yargs       = require 'yargs'
 streamqueue = require 'streamqueue'
+bower       = require 'bower'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
@@ -32,6 +33,7 @@ imgmin      = require 'gulp-imagemin'
 rename      = require 'gulp-rename'
 gettext     = require 'gulp-angular-gettext'
 karma       = require 'gulp-karma'
+shell       = require 'gulp-shell'
 protractor  = require('gulp-protractor').protractor
 prepend     = require('gulp-insert').prepend
 
@@ -188,7 +190,7 @@ gulp.task 'default', ['develop'], ->
 gulp.task 'clean', ->
   gulp.src './dist', read: false
     .pipe clean()
-gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor:js','vendor:fonts', 'client:img', 'ngm:img']
+gulp.task 'build', ['ngm:app.js', 'ngm:app.css', 'vendor:js','vendor:fonts', 'client:img', 'ngm:img', 'ngm:i18n']
 gulp.task 'develop', ['server:run', 'watch']
 
 gulp.task 'client:img', ->
@@ -276,6 +278,7 @@ gulp.task 'ngm:i18n', ->
     .pipe gettext.compile format: 'json'
     .pipe gulp.dest 'dist/public/lang'
 
+gulp.task 'project:install', shell.task(['npm install', 'bower install', 'bower update'])
 
 gulp.task 'publish', ->
   # set env to production
