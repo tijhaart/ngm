@@ -269,10 +269,10 @@ gulp.task 'ngm:i10n', ->
   gulp.src 'client/src/**/*.jade'
     .pipe jade pretty:false
     .pipe gettext.extract 'template.pot'
-    .pipe gulp.dest 'lang/pot'
+    .pipe gulp.dest 'client/src/lang/pot'
 
 gulp.task 'ngm:i18n', ->
-  gulp.src 'lang/po/*.po'
+  gulp.src 'client/src/lang/po/*.po'
     .pipe gettext.compile format: 'json'
     .pipe gulp.dest 'dist/public/lang'
 
@@ -304,7 +304,7 @@ gulp.task 'watch', ['build'], ->
   gulp.watch ['client/src/vendor/**/*.js'], ['vendor:js']
 
   gulp.watch [
-    'dist/public/**/*.{js,css}',
+    'dist/public/**/*.{js,css,png,jpg,gif,svg,jpeg}',
     'app/{src,plugins}/**/*'], (change)->
     log.info "[#{change.type}] #{Path.relative './', change.path}"
     # Full page reload
