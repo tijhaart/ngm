@@ -278,6 +278,7 @@ gulp.task 'ngm:i18n', ->
     .pipe gettext.compile format: 'json'
     .pipe gulp.dest 'dist/public/lang'
 
+# requires gulp-shell
 gulp.task 'project:install', shell.task(['npm install', 'bower install', 'bower update'])
 
 gulp.task 'publish', ->

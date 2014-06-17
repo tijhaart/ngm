@@ -17,9 +17,6 @@ describe 'service: todoProjectService', ->
     task:
       title: 'Get ingredients from store'
 
-  # given project x
-  # it should create a new task y 
-
   Given -> module 'todo'
   Given -> inject (_todoProjectService_)-> @service = _todoProjectService_
 
@@ -41,9 +38,22 @@ describe 'service: todoProjectService', ->
       Then -> expect(@task).toEqual(task)
       And -> expect(@project.$task.count()).toBe(1)
 
-    
+      describe "save project", ->
+        Given -> inject ($window)-> 
+          @Storage = $window.localStorage
+          return
+        When -> 
+          @project.$save()          
+          @projects = angular.fromJson @Storage['projects']
+        Then "it should have saved the project to a data store", -> 
+          expect(@projects.length).toBe(1)
+          expect(@projects[0].title).toBe(@projectTitle)
+          return
 
-  
+        describe "get saved projects", ->
+          When -> @projects = @service.getProjects()
+          Then -> expect(@projects.length).toBe(1)
+
 
 
 # describe 'todo', ->
