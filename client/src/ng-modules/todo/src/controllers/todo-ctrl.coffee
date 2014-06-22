@@ -7,108 +7,19 @@ do (module)->
    * @description
    * [description]
   ###
-  module.controller 'TodoCtrl', di ($scope, $ionicModal, Projects, $timeout, $ionicSideMenuDelegate)->
+  module.controller 'TodoCtrl', di ($scope, todoProjectService, $ionicSideMenuDelegate)->
+    $scope.TodoCtrl = @
+    Todo = todoProjectService
+    @projects = Todo.projects
+    
+    demoProj = Todo.createProject 'Demo'
+    demoProj.$task.add 'Test task'
+    demoProj.$task.add 'Test task v2'
 
-    defaults =
-      projects: [
-          title: 'Supper', tasks: ['Get ingredients', 'Prepare supper', 'Lay the table', 'Invite guests to table', 'Enjoy supper', 'Clear the table', 'Wash the dishes']
-        ,
-          title: 'Movie', tasks: ['Get tickets', 'Go to theater', 'Watch movie', 'Enjoy break', 'Resume watching the movie', 'Go home']
-      ]
 
-    createProject = (projectTitle)->
-      $scope.projects = $scope.projects or []
+    @activeProject = @projects[Todo.getLastUsedProjectIndex()]
 
-      newProject = Projects.newProject projectTitle
-      $scope.projects.push newProject
-      Projects.save $scope.projects
-      $scope.selectProject newProject, $scope.projects.length - 1
-      return
-
-    $scope.projects = Projects.all()
-    $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()]
-    $scope.newProjectModal = newProjectModal = {}
-
-    $scope.log = ->
-      console.log arguments
-
-    $scope.restoreDefaults = ->
-      Projects.removeProjects()
-      $scope.projects = []
-
-      _.each defaults.projects, (project, index)->
-
-        createProject project.title
-        $scope.activeProject = Projects.all()[index]
-        project.tasks.forEach (task)-> $scope.createTask title: task
-
-      console.log Projects.all()
-
-    $scope.saveProjects = ->
-      Projects.save($scope.projects)
-
-    $ionicModal.fromTemplateUrl 'todo/modal/new-project.html', (modal)->
-      newProjectModal = modal
-      return
-    , 
-      scope: $scope
-
-    $scope.newProject = ->
-      newProjectModal.show()
-      return
-
-    $scope.closeNewProject = ->
-      newProjectModal.hide()
-      return
-
-    $scope.createProject = (project)->
-      if project and project.title then createProject project.title
-      newProjectModal.hide()
-      return
-
-    $scope.selectProject = (project, index)->
-      $scope.activeProject = project
-      Projects.setLastActiveIndex index
-      $ionicSideMenuDelegate.toggleLeft false 
-      return
-
-    $scope.removeProjects = ->
-      Projects.removeProjects()
-      $scope.projects = null
-      $scope.activeProject = null
-
-    $ionicModal.fromTemplateUrl 'todo/new-task.html', (modal)->
-      $scope.taskModal = modal
-      return
-    ,
-      scope: $scope
-
-    $scope.createTask = (task)->
-      if not $scope.activeProject or not task then return
-
-      $scope.activeProject.tasks.push 
-        title: task.title
-        done: false
-      $scope.taskModal.hide()
-      Projects.save $scope.projects
-      task.title = null
-      return
-
-    $scope.newTask = ->
-      $scope.taskModal.show()
-      return
-
-    $scope.closeNewTask = ->
-      $scope.taskModal.hide()
-      return
-
-    $scope.toggleProjects = ->
+    @toggleProjects = ->
       $ionicSideMenuDelegate.toggleLeft()
-
-    # $scope.newProject()
-
-    $timeout ->
-      if $scope.projects.length is 0 then $scope.newProject()
-      return
 
     return @

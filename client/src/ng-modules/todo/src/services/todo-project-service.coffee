@@ -10,7 +10,8 @@ do (module)->
 
     @projects = []
 
-    @saveProjects = (projects)->
+    @saveProjects = (projects)=>
+      Store 'projects', projects or @projects
       return
 
     Store = (key, value)->
@@ -37,12 +38,15 @@ do (module)->
       count: -> @tasks.length
 
     @getProjects = -> Store('projects') or []
+    @removeProjects = -> Store('projects', [])
+    @getLastUsedProjectIndex = ()-> (Store 'projects.cfg.lastUsedProject') or null
+    @setLastUsedProjectIndex = (index)-> (Store 'projects.cfg.lastUsedProject', index)
     
     @createProject = (title)=>
       project =
         title: title
         $task: new Task()
-        $save: => Store 'projects', @projects 
+        $save: => @saveProjects()
 
       @projects.push project
 

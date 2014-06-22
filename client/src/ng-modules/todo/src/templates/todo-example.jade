@@ -2,7 +2,7 @@
 ion-side-menus
   ion-side-menu-content
     ion-header-bar.bar-dark.bar
-      button.button.button-icon(ng-click="toggleProjects()", title="{{ 'Toggle projects' | translate }}")
+      button.button.button-icon(ng-click="TodoCtrl.toggleProjects()", title="{{ 'Toggle projects' | translate }}")
         i.icon.ion-navicon
       h1.title
         | {{ activeProject.title }} 
@@ -28,13 +28,13 @@ ion-side-menus
     ion-header-bar.bar-dark
       h1.title 
         | {{ 'Projects' | translate }} 
-        span(ng-show="projects.length") ({{ projects.length }})
+        span(ng-show="TodoCtrl.projects.length") ({{ TodoCtrl.projects.length }})
       button.button.button-icon.ion-plus(ng-click="newProject()", title="{{ 'New project' | translate }}")
 
     ion-content(scroll="false")
       ion-list
         ion-item(
-          ng-repeat="project in projects", 
+          ng-repeat="project in TodoCtrl.projects", 
           ng-class="{active: activeProject === project}",
           ng-click="selectProject(project, $index)")
           | {{ project.title }}
