@@ -279,7 +279,7 @@ gulp.task 'ngm:i18n', ->
     .pipe gulp.dest 'dist/public/lang'
 
 # requires gulp-shell
-gulp.task 'project:install', shell.task(['npm install', 'bower install', 'bower update'])
+gulp.task 'project:install', shell.task(['npm install', 'bower install'])
 
 gulp.task 'publish', ->
   # set env to production
