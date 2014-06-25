@@ -64,6 +64,11 @@ describe 'service: todoProjectService', ->
           Then -> @service.getLastUsedProjectIndex() == 1
           And -> expect(parseInt(@Storage['projects.cfg.lastUsedProject'],10)).toBe(1)
 
+        describe "set falsy index of last used project", ->
+          When -> @service.setLastUsedProjectIndex(0)
+          Then -> expect(parseInt(@Storage['projects.cfg.lastUsedProject'],10)).toBe(0)
+
+
         describe "get saved projects", ->
           When -> @projects = @service.getProjects()
           Then -> expect(@projects.length).toBe(1)

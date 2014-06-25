@@ -17,8 +17,8 @@ ion-side-menus
     ion-content
       ion-list.todo-tasks
         ion-checkbox(
-          ng-repeat="task in activeProject.tasks",
-          ng-change="saveProjects()",
+          ng-repeat="task in TodoCtrl.activeProject.$task.tasks",
+          ng-change="TodoCtrl.saveProjects(TodoCtrl.projects)",
           ng-class="{checked: task.done}",
           ng-model="task.done",
           ng-checked="task.done")
@@ -35,6 +35,6 @@ ion-side-menus
       ion-list
         ion-item(
           ng-repeat="project in TodoCtrl.projects", 
-          ng-class="{active: activeProject === project}",
-          ng-click="selectProject(project, $index)")
+          ng-class="{active: TodoCtrl.activeProject.title == project.title}",
+          ng-click="TodoCtrl.setActiveProject(project, $index)")
           | {{ project.title }}

@@ -15,10 +15,10 @@ do (module)->
       return
 
     Store = (key, value)->
-      if not value 
+      if _.isUndefined value 
         return if $window.localStorage[key] then angular.fromJson $window.localStorage[key]
       else
-        return $window.localStorage[key] = JSON.stringify(value)
+        return $window.localStorage[key] = JSON.stringify(angular.copy value)
       return
 
     Task = (title)->
@@ -28,6 +28,10 @@ do (module)->
 
     Task:: =
       add: (title)->
+        if _.isArray title 
+          _.forEach title, (title)=> @add title
+          return
+
         task =
           title: title
           done: false
@@ -38,9 +42,14 @@ do (module)->
       count: -> @tasks.length
 
     @getProjects = -> Store('projects') or []
+    
     @removeProjects = -> Store('projects', [])
+    
     @getLastUsedProjectIndex = ()-> (Store 'projects.cfg.lastUsedProject') or null
-    @setLastUsedProjectIndex = (index)-> (Store 'projects.cfg.lastUsedProject', index)
+    
+    @setLastUsedProjectIndex = (index)-> 
+      (Store 'projects.cfg.lastUsedProject', index)
+      return
     
     @createProject = (title)=>
       project =
