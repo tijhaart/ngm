@@ -1,0 +1,9 @@
+{
+  "name": "models",
+  "main": "models.coffee",
+
+  "plugin": {
+    "consumes": ["server", "rest"],
+    "provides": ["Model"]
+  }
+}

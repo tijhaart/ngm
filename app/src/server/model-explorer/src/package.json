@@ -1,0 +1,9 @@
+{
+  "name": "model-explorer",
+  "main": "model-explorer",
+
+  "plugin": {
+    "consumes": ["server", "rest"],
+    "provides": ["modelExplorer"]
+  }
+}

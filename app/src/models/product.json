@@ -1,0 +1,18 @@
+{
+  "name": "product",
+
+  "properties": {
+    "id": {
+      "type": "String",
+      "id": true,
+      "required": true
+    },
+    "title": {
+      "type": "String",
+      "required": true
+    },
+    "description": {
+      "type": "String"
+    }
+  }
+}

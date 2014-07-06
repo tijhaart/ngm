@@ -1,0 +1,11 @@
+{
+  "_meta": {
+    "sources": ["../../../models"]
+  },
+  "product": {
+    "dataSource": "db"
+  },
+  "task": {
+    "dataSource": "db"
+  }
+}

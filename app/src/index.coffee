@@ -7,8 +7,9 @@ color       = require 'chalk'
 startServer = Promise.pending()
 cliArgs     = yargs.argv
 
-if cliArgs.run
+if cliArgs.run or require.main == module
   startServer.resolve()
+
 
 
 ###*
