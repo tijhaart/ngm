@@ -3,7 +3,7 @@
   "main": "models.coffee",
 
   "plugin": {
-    "consumes": ["server", "rest"],
-    "provides": ["Model"]
+    "consumes": ["plugin.model.helper"],
+    "provides": ["models"]
   }
 }

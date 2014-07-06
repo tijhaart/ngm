@@ -4,8 +4,10 @@ _        = require 'lodash' # make globaly available via imports/architect
 
 
 module.exports = (options, imports, register)->
-  rest    = imports.rest.instance
-  server  = loopback()
+  models          = imports.models
+  modelExplorer   = imports.modelExplorer
+  rest            = imports.rest.instance
+  server          = loopback()
 
   # util
   serverUse = (middlewares)->
@@ -24,6 +26,14 @@ module.exports = (options, imports, register)->
         # This will bind the rest app on the restApiRoot.
         # Example usage: localhost:3000/api/<resource>
         server.use (rest.get 'restApiRoot'), rest
+        # models.attachModels(rest)
+        models.attachModels(rest)
+
+        # view REST API endopoint for the models 
+        # via /model-explorer (default route)
+        modelExplorer
+          rest: rest
+          server: server
 
         lbBoot server, __dirname  
 
