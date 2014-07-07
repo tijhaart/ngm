@@ -20,7 +20,7 @@ config = (require './.architect').depedencies or []
 tree = architect.resolveConfig config, __dirname
 
 architect.createApp tree, (err, app)->
-  throw Error err if err
+  throw err if err 
 
   console.log color.blue('[architect]') + ' tree resolved'
   

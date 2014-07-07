@@ -31,5 +31,5 @@ module.exports = (options, imports, register)->
   register null,
     models:
       modelsAttached: modelsAttached.promise
-      registerModel: ModelHelper.register
+      registerModel: -> ModelHelper.register.apply(ModelHelper, arguments)
       attachModels: attachModels

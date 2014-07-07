@@ -30,6 +30,8 @@ module.exports = (options, imports, register)->
         modelsResolved.then (models)->
           modelCreated.resolve(model: Model, models: models)
 
+      console.log @
+
       @$models.push 
         name: modelCfg.name, 
         factory: modelFactory

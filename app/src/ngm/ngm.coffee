@@ -8,9 +8,23 @@ _           = require 'lodash'
 ###
 module.exports = (options, imports, register)->
 
-  server      = imports.server
-  app         = server.instance
-  clientPath  = imports.config.clientPath
+  registerModel = imports.models.registerModel
+  server        = imports.server
+  app           = server.instance
+  clientPath    = imports.config.clientPath
+
+
+  # register models anywhere :) remove eventually
+  registerModel(
+    name: 'temp'
+    plural: 'tempas'
+    properties:
+      title: 'string'
+  )
+  .then (model)->
+    console.log model
+
+    return model
 
   # config: env
   isDev = process.env.NODE_ENV == 'develop'
