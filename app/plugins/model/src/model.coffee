@@ -1,18 +1,43 @@
-_ = require 'lodash'
+_         = require 'lodash'
+loopback  = require 'loopback'
+bluebird  = require 'bluebird'
 
 module.exports = (options, imports, register)->
 
-  ModelHelper =
-    $models: []
+  ModelHelper = ->
+    @$models = []
+    return @
+
+  ModelHelper:: =
+    reset: -> @$models = []
     register: (modelCfg)->
-      console.log 'register', modelCfg.name
+      # todo? check if model name exists
+
+      modelCreated = bluebird.pending()
+
       _.defaults modelCfg,
         name: null
         properties: {}
         options: {}
         dataSource: 'db'
 
-      @$models.push modelCfg
+      console.log '[ModelHelper] register', modelCfg.name
+
+      modelFactory = (app, modelsResolved)->
+        console.log '[ModelHelper] attach to (given) app'
+        Model = app.model loopback.createModel modelCfg
+        # when models resolved then resolve model with models
+        modelsResolved.then (models)->
+          modelCreated.resolve(model: Model, models: models)
+
+      @$models.push 
+        name: modelCfg.name, 
+        factory: modelFactory
+        modelCreated: modelCreated.promise, 
+
+      return modelCreated.promise
+
+
 
   register null,
-    "plugin.model.helper": ModelHelper
+    "plugin.model.helper": -> new ModelHelper()

@@ -1,28 +1,35 @@
 loopback  = require 'loopback'
 _         = require 'lodash'
+Q         = require('bluebird')
 
 module.exports = (options, imports, register)->
-  ModelHelper = imports['plugin.model.helper']
+  ModelHelper     = imports['plugin.model.helper']()
+  modelsAttached  = Q.pending()
 
-  # rest.model loopback.createModel ProjectSchema
-  # rest.models.project.create projects
+  # require('./default-models/project')(ModelHelper)
 
-  require('./default-models/project')(ModelHelper);
+  defaultModels = ['project', 'task']
 
+  _.forEach defaultModels, (modelName)-> 
+    require("./default-models/#{modelName}")(ModelHelper)
+
+  ###*
+   * Create and attach loopback models to the given (loopback/express) app
+   * @param  {loopback app} app
+   * @return {promise}      All models are attached
+  ###
   attachModels = (app)->
 
-    ModelHelper.$models.forEach (modelCfg)->
-      console.log 'each', modelCfg.name
-      app.model loopback.createModel modelCfg
+    _.forEach ModelHelper.$models, (model)->
+      model.factory app, modelsAttached.promise
 
-    # rest.models.project.create projects
+    modelsAttached.resolve(app.models)
 
-    # todo: resolve a promise
-    # this promise should also be passed to any registerd models (cfg)
-    # for example: added data when the model is created by loopback
+    return modelsAttached.promise
 
 
   register null,
     models:
+      modelsAttached: modelsAttached.promise
       registerModel: ModelHelper.register
       attachModels: attachModels

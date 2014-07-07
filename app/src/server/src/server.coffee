@@ -26,7 +26,8 @@ module.exports = (options, imports, register)->
         # This will bind the rest app on the restApiRoot.
         # Example usage: localhost:3000/api/<resource>
         server.use (rest.get 'restApiRoot'), rest
-        # models.attachModels(rest)
+
+        # create all the registered models via loopback.createModel {modelCfg}
         models.attachModels(rest)
 
         # view REST API endopoint for the models 

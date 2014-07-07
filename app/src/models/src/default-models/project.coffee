@@ -1,25 +1,47 @@
-module.exports = (ModelHelper, attached)->
+module.exports = (ModelHelper)->
   modelCfg = 
     name: 'project' 
     properties:
-      # id:           type: 'number', required: true, id: true
+      projectId:
+        type: 'number' 
+        id: true
+        generated: true
       title:        
         type: 'string'
         required: true
       # description:  'string'
     dataSource: 'db'
+    options:
+      relations:
+        task:
+          model: 'task'
+          type: 'hasMany'
+          foreignKey: 'taskId'
 
-  projects = [
-      title: 'Todo'
-    ,
-      title: 'Battlefield loadouts'
-    ,
-      title: 'Loopback'
-  ]
+  ModelHelper.register(modelCfg).then (data)->
+    models = data.models
+    model  = data.model
 
-  # todo make promise
-  # when model is added it should be able to add some data
-  ModelHelper.register(modelCfg)
+    projects = [
+        title: 'Todo'
+      ,
+        title: 'Battlefield loadouts'
+      ,
+        title: 'Loopback'
+    ]
+    model.create projects, (err, res)->
+      console.log err
+      console.log res
 
-  # attached.then (app)->
-  # app.models.project.create projects
+    
+    project = new model title: 'Foobar'
+
+    project.task.create title: 'bar', (err, res)->
+      console.log err, res
+
+    project.save()
+
+
+    return model
+
+  return modelCfg
