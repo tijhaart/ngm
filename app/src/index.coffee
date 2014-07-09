@@ -7,8 +7,9 @@ color       = require 'chalk'
 startServer = Promise.pending()
 cliArgs     = yargs.argv
 
-if cliArgs.run
+if cliArgs.run or require.main == module
   startServer.resolve()
+
 
 
 ###*
@@ -19,7 +20,7 @@ config = (require './.architect').depedencies or []
 tree = architect.resolveConfig config, __dirname
 
 architect.createApp tree, (err, app)->
-  throw Error err if err
+  throw err if err 
 
   console.log color.blue('[architect]') + ' tree resolved'
   

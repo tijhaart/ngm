@@ -3,7 +3,7 @@
   "main": "ngm.coffee",
 
   "plugin": {
-    "consumes": ["config", "server"],
+    "consumes": ["config", "server", "models"],
     "provides": []
   }
 }

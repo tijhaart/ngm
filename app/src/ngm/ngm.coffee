@@ -5,20 +5,15 @@ _           = require 'lodash'
 
 module.exports = (options, imports, register)->
 
-  server      = imports.server
-  app         = server.instance
-  clientPath  = imports.config.clientPath
+  registerModel = imports.models.registerModel
+  server        = imports.server
+  app           = server.instance
+  clientPath    = imports.config.clientPath
 
+  # config: env
   isDev = process.env.NODE_ENV == 'develop'
 
   server.useStatic clientPath
-
-  # staticImports = require (Path.join clientPath, 'imports.json')
-
-  # ionic requires fonts: 
-  #   css/style
-  #     ../fonts/x.y
-  #
 
   staticImports = 
     css: [
@@ -32,6 +27,8 @@ module.exports = (options, imports, register)->
     js: []
 
   app.get '/app', routes.app(imports:staticImports, isDev: isDev, isHybridBuild:false)
+  app.get '/', (req, res)->
+    res.send 'It works! <br> ' + Path.relative imports.config.projectPath, __dirname
 
 
   register null

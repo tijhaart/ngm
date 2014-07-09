@@ -2,7 +2,11 @@
   "depedencies": [
     "./config",
     "./config/routes",
-    "./server",
-    "./ngm"
+    "./server/src",
+    "./server/rest/src",
+    "./server/model-explorer/src",
+    "./models/src",
+    "./ngm",
+    "../plugins/model/src"
   ]
 }

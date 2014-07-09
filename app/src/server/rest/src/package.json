@@ -1,0 +1,9 @@
+{
+  "name": "rest",
+  "main": "rest.coffee",
+
+  "plugin": {
+    "consumes": [],
+    "provides": ["rest"]
+  }
+}
