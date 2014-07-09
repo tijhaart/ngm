@@ -34,3 +34,4 @@ Scenario: Meerdere klanten koppelen aan het project
 # noodzakelijk?
 Scenario: Klant aan meerdere projecten koppelen
   Gegeven de projecten "Huisstijl Fiets B.V." en "Website fiets.nl"
+  Als 
