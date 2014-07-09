@@ -28,6 +28,9 @@ Scenario: Feature template aanpassen in het project
 Scenario: Feature template verwijderen
 
 Scenario: Feature template bijwerken
+  Gegeven de feature template "Contactformulier"
+  Als de feature wordt bijgewerkt
+  Dan mogen projecten die gebruik maken de template niet worden bijgewerkt met deze feature
 
 Scenario: Nieuwe feature template aanmaken op basis van een bestaande feature template
   Gegeven dat er reeds de feature template "Contactformulier" bestaat
