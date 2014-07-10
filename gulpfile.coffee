@@ -153,8 +153,10 @@ jsVendorTask = ->
     "angular":            '/angular.js'
     "angular-animate":    '/angular-animate.js'
     "angular-sanitize":   '/angular-sanitize.js'
+    "angular-resource":   '/angular-resource.js'
     "angular-ui-router":  '/release/angular-ui-router.js'
     "ionic":              '/js/ionic.js'
+    "lb-services":        '/index.js'
     "angular-gettext":    '/dist/angular-gettext.js'
 
   bower = require './bower.json'

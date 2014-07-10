@@ -47,6 +47,7 @@
     "karma-coffee-preprocessor": "~0.2.1",
     "karma-jasmine": "~0.1.5",
     "lodash": "~2.4.1",
+    "loopback-sdk-angular": "^1.1.2",
     "protractor": "~0.24.1",
     "remove": "~0.1.5",
     "streamqueue": "0.0.6",

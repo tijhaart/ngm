@@ -17,10 +17,6 @@ module.exports = (options, imports, register)->
     clientPath: PROJECT_PATH + '/dist/public'
     serverPort: 9000 || 1234
     projectPath: PROJECT_PATH
-    database:
-      'postgres':
-        port: 1345
-        host: 'postgres://192.168.1.924'
 
   register null, 
     config: config

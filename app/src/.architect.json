@@ -6,6 +6,7 @@
     "./server/rest/src",
     "./server/model-explorer/src",
     "./models/src",
+    "./models/lb-ng/src",
     "./ngm",
     "../plugins/model/src"
   ]

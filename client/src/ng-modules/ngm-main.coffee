@@ -1,3 +1,3 @@
 # bootstrap Angular app
 angular.element(document).ready ->
-  angular.bootstrap(document, ['todo', 'gettext']);
+  angular.bootstrap(document, ['todo', 'gettext', 'lbServices']);
