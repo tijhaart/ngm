@@ -3,6 +3,8 @@ Promise     = require 'bluebird'
 _           = require 'lodash'
 yargs       = require 'yargs'
 color       = require 'chalk'
+glob        = require 'glob'
+$path       = require 'path'
 
 startServer = Promise.pending()
 cliArgs     = yargs.argv
@@ -10,16 +12,28 @@ cliArgs     = yargs.argv
 if cliArgs.run or require.main == module
   startServer.resolve()
 
+getPackgesCfg = ->
+  packages = [
+    __dirname + '/**/package.json',
+    'plugins' + '/**/package.json'
+  ]
+  base = $path.resolve __dirname, '../'
+  pluginPaths = _.reduce packages, (pluginPaths, pluginGlob)->
 
+    paths = glob.sync pluginGlob #($path.relative __dirname, pluginGlob)
+    paths = paths.map (path)-> "./#{$path.dirname ($path.relative base, path)}"
 
-###*
- * @todo create architect config with glob/mimnatch pattern
- * @type {[type]}
-###
-config = (require './.architect').depedencies or []
-tree = architect.resolveConfig config, __dirname
+    if paths.length
+      return pluginPaths.concat paths  
 
-architect.createApp tree, (err, app)->
+    return pluginPaths
+  , []
+
+  # @TODO allow packages defined in architect.json also to be loaded (e.g. external modules from npm)
+
+  return packagesCfg = (architect.resolveConfig pluginPaths, base)
+
+architect.createApp getPackgesCfg(), (err, app)->
   throw err if err 
 
   console.log color.blue('[architect]') + ' tree resolved'
