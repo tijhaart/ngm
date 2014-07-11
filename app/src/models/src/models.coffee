@@ -8,7 +8,7 @@ module.exports = (options, imports, register)->
 
   # require('./default-models/project')(ModelHelper)
 
-  defaultModels = ['project', 'task']
+  defaultModels = ['project', 'task', 'user']
 
   _.forEach defaultModels, (modelName)-> 
     require("./default-models/#{modelName}")(ModelHelper)
@@ -26,7 +26,6 @@ module.exports = (options, imports, register)->
     modelsAttached.resolve(app.models)
 
     return modelsAttached.promise
-
 
   register null,
     models:

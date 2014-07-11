@@ -29,17 +29,17 @@ module.exports = (ModelHelper)->
       ,
         title: 'Loopback'
     ]
-    model.create projects, (err, res)->
-      console.log err
-      console.log res
+    # model.create projects, (err, res)->
+    #   console.log err
+    #   console.log res
 
     
-    project = new model title: 'Foobar'
+    # project = new model title: 'Foobar'
 
-    project.task.create title: 'bar', (err, res)->
-      console.log err, res
+    # project.task.create title: 'bar', (err, res)->
+    #   console.log err, res
 
-    project.save()
+    # project.save()
 
 
     return model
