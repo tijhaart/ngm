@@ -151,12 +151,13 @@ jsVendorTask = ->
     "underscore.string":  '/lib/underscore.string.js'
     "jquery":             '/dist/jquery.js'
     "angular":            '/angular.js'
+    "breezejs":           ['/breeze.debug.js','/labs/breeze.angular.js']
     "angular-animate":    '/angular-animate.js'
     "angular-sanitize":   '/angular-sanitize.js'
     "angular-resource":   '/angular-resource.js'
     "angular-ui-router":  '/release/angular-ui-router.js'
-    "ionic":              '/js/ionic.js'
-    "lb-services":        '/index.js'
+    "ionic":              ['/js/ionic.js', '/js/ionic-angular.js']
+    # "lb-services":        '/index.js'
     "angular-gettext":    '/dist/angular-gettext.js'
 
   bower = require './bower.json'
@@ -164,11 +165,11 @@ jsVendorTask = ->
   sources = _.reduce bower.dependencies, (sources, version, index)->
     # will also include local vendor scripts b/c bower installs and copies to vendor dir
 
-    if paths[index]
+    if _.isArray paths[index]
+      _.forEach paths[index], (filename)->
+        sources.push Path.join 'client/src/vendor', index, filename
+    else if paths[index]
       sources.push Path.join 'client/src/vendor', index, paths[index]
-
-    if index == 'ionic'
-      sources.push Path.join 'client/src/vendor', index, '/js/ionic-angular.js'
     return sources
   , []
 
