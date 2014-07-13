@@ -7,7 +7,7 @@ module.exports = (options, imports, register)->
   models          = imports.models
   modelExplorer   = imports.modelExplorer
   rest            = imports.rest.instance
-  clientModels    = imports["models.client"]
+  # clientModels    = imports["models.client"]
   projectPath     = imports.config.projectPath
   server          = loopback()
 
@@ -32,13 +32,7 @@ module.exports = (options, imports, register)->
         server.use restApiRoot, rest
 
         # create all the registered models via loopback.createModel {modelCfg}
-        models.attachModels(rest).then -> 
-
-          clientModels.generate
-            app: rest
-            restApiRoot: restApiRoot
-            path: "#{projectPath}/client/src/vendor_local/lbServices/index.js"
-          return
+        models.attachModels(rest)
 
         # view REST API endopoint for the models 
         # via /model-explorer (default route)
@@ -58,6 +52,6 @@ module.exports = (options, imports, register)->
           baseUrl = 'http://' + (server.get('host') or '0.0.0.0') + ':' + server.get('port')
           console.log '[server] server started at: %s', baseUrl
       stop: ->
-      reset: ->
+      restart: -> 
       useStatic: (dir)->
         server.use loopback.static dir

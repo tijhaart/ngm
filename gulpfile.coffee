@@ -11,7 +11,7 @@ bower       = require 'bower'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
-server      = require('./app/src')
+Server      = require('./app/src')
 
 coffee      = require 'gulp-coffee'
 concat      = require 'gulp-concat'
@@ -151,7 +151,7 @@ jsVendorTask = ->
     "underscore.string":  '/lib/underscore.string.js'
     "jquery":             '/dist/jquery.js'
     "angular":            '/angular.js'
-    "breezejs":           ['/breeze.debug.js','/labs/breeze.angular.js']
+    # "breezejs":           ['/breeze.debug.js', '/labs/breeze.metadata-helper.js', '/labs/breeze.angular.js']
     "angular-animate":    '/angular-animate.js'
     "angular-sanitize":   '/angular-sanitize.js'
     "angular-resource":   '/angular-resource.js'
@@ -249,8 +249,8 @@ gulp.task 'vendor:fonts', ->
   gulp.src 'client/src/vendor/ionic/fonts/*.{eot,svg,ttf,woff}'
     .pipe gulp.dest 'dist/public/fonts'
 
-gulp.task 'server:run', ['build'], ->
-  server()
+gulp.task 'server:run', ['build'], -> 
+  Server()
 
 gulp.task 'test:unit', ->
   gulp.src './fake-path/so-plugin/uses-config'
@@ -317,6 +317,9 @@ gulp.task 'watch', ['build'], ->
     # Full page reload
     # https://github.com/vohof/gulp-livereload/issues/7
     lr.changed path: 'index.html'
+
+  # gulp.watch 'app/{src,plugins}/**/*', (change)->
+  #   console.log 'reload server side app'
 
   gulp.watch 'client/src/img/**/*.{png,jpg,gif,svg,jpeg}', ['client:img']
   gulp.watch 'client/src/ng-modules/**/*.{png,jpg,gif,svg,jpeg}', ['ngm:img']
