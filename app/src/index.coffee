@@ -10,7 +10,6 @@ startServer = Promise.pending()
 cliArgs     = yargs.argv
 
 if cliArgs.run or require.main == module
-  console.log 'foo'
   startServer.resolve()
 
 getPackgesCfg = ->
@@ -49,7 +48,8 @@ getPackgesCfg().then (packages)->
     services = app.services
     server   = services.server
 
-    startServer.promise.then -> server.start()
+    startServer.promise.then -> 
+      server.start()
 
   # server.start()
 module.exports = -> startServer.resolve(); return startServer.promise

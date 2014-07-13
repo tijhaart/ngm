@@ -11,7 +11,7 @@ bower       = require 'bower'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
-Server      = require('./app/src')
+# Server      = require('./app/src')
 
 coffee      = require 'gulp-coffee'
 concat      = require 'gulp-concat'
@@ -249,8 +249,20 @@ gulp.task 'vendor:fonts', ->
   gulp.src 'client/src/vendor/ionic/fonts/*.{eot,svg,ttf,woff}'
     .pipe gulp.dest 'dist/public/fonts'
 
+isRunning = false
 gulp.task 'server:run', ['build'], -> 
-  Server()
+
+  runServer = ->
+    if not isRunning
+      nodemon = require 'nodemon'
+      # nodemon '--ignore ./* app/src/index.coffee'
+      nodemon
+        script: 'app/src/index.coffee'
+        ignore: ['client', 'dist', 'build-support', 'docs', 'node_modules', 'test', '.{json,coffee,js,md}']
+
+      isRunning = true
+
+  runServer()
 
 gulp.task 'test:unit', ->
   gulp.src './fake-path/so-plugin/uses-config'

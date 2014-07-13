@@ -9,6 +9,8 @@ module = do ( module = angular.module('user', ['breeze.angular']) )->
 
   module.factory 'models', di ->
 
+    # use $ngResource anyway
+
     collection = 
       user: {}
 
