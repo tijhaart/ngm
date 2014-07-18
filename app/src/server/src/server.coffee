@@ -16,15 +16,19 @@ module.exports = (options, imports, register)->
     _.forEach middlewares, (middleware)->
       server.use middleware
     return
-
   # config
   server.set('view engine', 'jade')
 
   register null,
     server:
       instance: server
-      start: ->
+      start: ->       
+
+        lbBoot server, __dirname  
+
         server.use loopback.compress()
+
+        server.use loopback.logger 'dev'
 
         restApiRoot = rest.get 'restApiRoot'
         # This will bind the rest app on the restApiRoot.
@@ -32,26 +36,30 @@ module.exports = (options, imports, register)->
         server.use restApiRoot, rest
 
         # create all the registered models via loopback.createModel {modelCfg}
-        models.attachModels(rest)
+        models.attachModels(rest).then ->    
 
-        # view REST API endopoint for the models 
-        # via /model-explorer (default route)
-        modelExplorer
-          rest: rest
-          server: server
+          # view REST API endopoint for the models 
+          # via /model-explorer (default route)
+          modelExplorer
+            rest: rest
+            server: server
 
-        lbBoot server, __dirname  
+          rest.use loopback.bodyParser()
+          rest.use loopback.methodOverride()
 
-        serverUse [
-          loopback.urlNotFound(),
-          loopback.errorHandler()
-        ]
+          rest.use loopback.cookieParser 'secret...'
+          rest.use loopback.token model: rest.models.accessToken
 
-        console.log '[server] starting server'
-        server.listen 3000, ()->
-          baseUrl = 'http://' + (server.get('host') or '0.0.0.0') + ':' + server.get('port')
-          console.log '[server] server started at: %s', baseUrl
-      stop: ->
-      restart: -> 
+          serverUse [
+            loopback.urlNotFound(),
+            loopback.errorHandler()
+          ]
+
+          #rest.enableAuth()
+
+          console.log '[server] starting server'
+          server.listen 3000, ()->
+            baseUrl = 'http://' + (server.get('host') or '0.0.0.0') + ':' + server.get('port')
+            console.log '[server] server started at: %s', baseUrl
       useStatic: (dir)->
         server.use loopback.static dir

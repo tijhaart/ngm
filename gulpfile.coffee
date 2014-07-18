@@ -263,6 +263,7 @@ gulp.task 'server:run', ['build'], ->
       isRunning = true
 
   runServer()
+  return
 
 gulp.task 'test:unit', ->
   gulp.src './fake-path/so-plugin/uses-config'
