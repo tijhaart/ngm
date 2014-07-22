@@ -8,7 +8,7 @@ module.exports = (options, imports, register)->
 
   # require('./default-models/project')(ModelHelper)
 
-  defaultModels = ['project', 'task', 'user', 'accessToken']
+  defaultModels = ['project', 'task', 'user', 'accessToken', 'acl']
 
   _.forEach defaultModels, (modelName)-> 
     require("./default-models/#{modelName}")(ModelHelper)

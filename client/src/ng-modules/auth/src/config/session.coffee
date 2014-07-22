@@ -26,40 +26,140 @@ do (module)->
 
       return User
 
-    SessionProvider.plugin 'auth', di ($q, $model, $timeout)->
+    SessionProvider.plugin 'auth', di ($q, $model, $log, $timeout)->
+      log = $log "#{module.name}:session.$auth"
       AuthUser = $model 'AuthUser'
 
+      Auth = (session)->
+        _log = $log "#{module.name}:Auth"
+        self = @
+        # setup storage support
+        @store().$restore()
+
+        _log.warn @store
+
+        @token = null
+        @user = null
+        @session = -> session
+
+        token: -> self.token
+        login: @login.bind self
+        logout: -> $q.when true
+
+      Auth:: =
+        login: (credentials={}, settings={})->
+          log.info 'login request', credentials, settings
+          login = $q.defer()
+          self = @
+
+          _.defaults credentials,
+            username: null
+            email: null
+            password: null
+
+          _.defaults settings,
+            remember: null
+
+          log.warn 'settings.remember is not used'
+
+          if (credentials.email or credentials.username) and credentials.password
+
+            AuthUser.login credentials
+            # save login data for further requests
+            .$promise.then (res)->
+              log.log 'login success', userId:res.data.userId
+              store = self.store
+              token = res.data.id
+              # use User model instead of AuthUser
+              user = new AuthUser res.data.user
+
+              store.authenticated =
+                userId: user.id
+                token: token
+
+              # @todo: save token to storage if settins.remember = true
+              rememberMe = res.config.params.rememberMe != false
+              log.info 'rememberMe', rememberMe
+              if rememberMe
+                store.$save()
+
+              login.resolve user
+
+              return user
+
+          else
+            log.warn 'invalid credentials'
+            login.reject
+              msg: 'credentials missing'
+
+          return login.promise
+        logout: ->
+        _onLoginSuccess: ->
+        _onLoginErr: ->
+        _onLogoutSuccess: ->
+        _onLogoutErr: ->
+
+      return Auth
+
+      ###
       return (session)->
+
+        console.log session.$auth
+
         user = null
         token = null
 
-        state = 
+        state =
           isLoggedIn: null
           isLoginInProgress: null
 
-        token: -> token
-        login: (credentials, settings)->
+        # @todo restore authentication if accessToken was saved to session or localStorage
 
-          AuthUser.login
-            email: 'johndoe@example.com'
-            password: 'demo'
+        onLogoutSuccess = (res)->
+          $log.info 'onLogoutSuccess', arguments
+
+          response =
+            userId: user.id
+
+          user = null
+          token = null
+
+          return response
+
+        onLogoutErr = (res)->
+          $log.info 'onLogoutErr', arguments
+          return
+
+        token: -> token
+        login: (credentials={}, settings={})->
+          _.defaults credentials,
+            email: null
+            password: null
+
+          _.defaults settings,
+            remember: null
+
+          AuthUser.login credentials
           # save login data for further requests
           .$promise.then (res)->
-            console.log res
-            console.log 'login.sucess', res.data
             token = res.data.id
             # use User model instead of AuthUser
             user = new AuthUser res.data.user
 
-            # todo save token to storage
+            # @todo: save token to storage if settins.remember = true
+            console.log res.config.params.rememberMe != false
+
+
 
             return user
         # rest user and token
         logout: ->
+          $log.info 'session.$auth', 'request logout',
+            user: user,
+            token: token
           if user
-            token = null
-            AuthUser.logout()
-          
+            return AuthUser.logout().$promise.then onLogoutSuccess, onLogoutErr
+      ###
 
     $provide.decorator 'AuthUserModel', di ($delegate)->
       allowed = ['$login', '$logout']

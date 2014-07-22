@@ -113,7 +113,7 @@ sassTask = (ngmodule)->
     sass:
       includePaths: ['./client/src/css/theme']
 
-  if CONFIG.isDev() then opts.sass.sourceComments = 'normal'  
+  if CONFIG.isDev() then opts.sass.sourceComments = 'normal'
 
   gulp.src ngmodule.path + '/styles/*.scss'
     # .pipe cached ngmodule.name + ':sass'
@@ -124,18 +124,18 @@ sassTask = (ngmodule)->
     .pipe concat ngmodule.name + '.css'
 
 sassBaseTask = ->
-  gulp.src [ 
+  gulp.src [
     './client/src/css/base/**/*.scss']
     # .pipe cached 'css:base'
     .pipe plumber()
     .pipe sass( if CONFIG.isDev() then sourceComments:'normal' )
-    # .pipe remember 'css:base'  
+    # .pipe remember 'css:base'
 
 sassThemeTask = ->
-  gulp.src [ 
+  gulp.src [
     './client/src/css/theme/*.scss']
     # .pipe cached 'css:theme'
-    .pipe plumber()    
+    .pipe plumber()
     .pipe sass( if CONFIG.isDev() then sourceComments:'normal' )
     # .pipe remember 'css:theme'
 
@@ -172,6 +172,9 @@ jsVendorTask = ->
       sources.push Path.join 'client/src/vendor', index, paths[index]
     return sources
   , []
+
+  # @todo use browserify to include visiomedia/debug
+  #sources.unshift "node_modules/debug/browser.js"
 
   gulp.src sources
     .pipe cached 'vendor:js'
@@ -224,17 +227,17 @@ gulp.task 'ngm:app.css', ->
     and re-run this task because dependent modules don't get updated
     after such a change because the module file itself hasn't changed
   ###
-  streamqueue( 
+  streamqueue(
     {objectMode: true},
     sassBaseTask(),
-    ngmodules.join(ngmodules sassTask), 
-    sassThemeTask() 
+    ngmodules.join(ngmodules sassTask),
+    sassThemeTask()
   )
     .pipe concat 'app.css'
     .pipe gulpif not CONFIG.isDev(), cssmin()
     .pipe gulp.dest 'dist/public/css'
 
-gulp.task 'ngm:img', ->  
+gulp.task 'ngm:img', ->
   ngmodules ngmImgTask
 
 gulp.task 'vendor:js', ->
@@ -250,7 +253,7 @@ gulp.task 'vendor:fonts', ->
     .pipe gulp.dest 'dist/public/fonts'
 
 isRunning = false
-gulp.task 'server:run', ['build'], -> 
+gulp.task 'server:run', ['build'], ->
 
   runServer = ->
     if not isRunning
@@ -267,14 +270,14 @@ gulp.task 'server:run', ['build'], ->
 
 gulp.task 'test:unit', ->
   gulp.src './fake-path/so-plugin/uses-config'
-    .pipe karma 
+    .pipe karma
       configFile: './test/karma.conf.coffee'
       action: 'watch'
     .on 'error', (err)->
       console.log err
 
 # e2e: End to end or integration testing
-# todo: run tests with a production task that set the NODE_ENV to production 
+# todo: run tests with a production task that set the NODE_ENV to production
 #       which will in turn should minify/optimize the static files
 gulp.task 'test:e2e', ['develop'], ->
   gulp.src './foo'
@@ -314,7 +317,7 @@ gulp.task 'watch', ['build'], ->
   # @todo: use working pattern ng-modules/**/* and then filter with /**/src/* to filter out modules
   gulp.watch [
     'client/src/js/*.{js,coffee}',
-    'client/src/ng-modules/**/src/**/*.{coffee,jade}', 
+    'client/src/ng-modules/**/src/**/*.{coffee,jade}',
     'client/src/ng-modules/ngm-main.coffee'], ['ngm:app.js']
 
   gulp.watch [

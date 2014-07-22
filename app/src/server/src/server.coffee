@@ -55,7 +55,7 @@ module.exports = (options, imports, register)->
             loopback.errorHandler()
           ]
 
-          #rest.enableAuth()
+          rest.enableAuth()
 
           console.log '[server] starting server'
           server.listen 3000, ()->
