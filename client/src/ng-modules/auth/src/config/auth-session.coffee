@@ -29,6 +29,9 @@ do (module)->
     SessionProvider.plugin 'auth', di ($q, $model, $log, $timeout)->
       log = $log "#{module.name}:session.$auth"
       AuthUser = $model 'AuthUser'
+      User = $model 'User'
+
+      console.dir User
 
       Auth = (session)->
         _log = $log "#{module.name}:Auth"
@@ -36,9 +39,11 @@ do (module)->
         # setup storage support
         @store().$restore()
 
-        _log.warn @store
+        log.debug 'restored ', @store
 
-        @token = null
+        authenticated = @store.authenticated
+
+        @token = authenticated and authenticated.token or null
         @user = null
         @session = -> session
 
@@ -62,12 +67,40 @@ do (module)->
 
           log.warn 'settings.remember is not used'
 
-          if (credentials.email or credentials.username) and credentials.password
+          store = self.store
+          authenticated = store.authenticated
+
+
+          if authenticated and authenticated.token
+            # note: token can be remote by server and the token might be invalid
+            # so an interceptor might be of use here to remove the token an direct
+            # to the login section
+
+            log.debug 'authenticated', authenticated
+
+            $timeout ->
+              log.debug 'moment'
+            , 10000
+
+            (User.findById id: authenticated.userId).$promise
+            # success
+            .then (user)->
+              log.debug 'User.findById', user
+              login.resolve user
+            # error
+            , (res)->
+              log.error 'User.findById', arguments
+              delete store['authenticated']
+              store.$save()
+
+              login.reject res.data.error
+
+          else if (credentials.email or credentials.username) and credentials.password
 
             AuthUser.login credentials
             # save login data for further requests
             .$promise.then (res)->
-              log.log 'login success', userId:res.data.userId
+              log.info 'login success', userId:res.data.userId
               store = self.store
               token = res.data.id
               # use User model instead of AuthUser
@@ -86,7 +119,6 @@ do (module)->
               login.resolve user
 
               return user
-
           else
             log.warn 'invalid credentials'
             login.reject
@@ -94,10 +126,10 @@ do (module)->
 
           return login.promise
         logout: ->
-        _onLoginSuccess: ->
-        _onLoginErr: ->
-        _onLogoutSuccess: ->
-        _onLogoutErr: ->
+        onLoginSuccess: ->
+        onLoginErr: ->
+        onLogoutSuccess: ->
+        onLogoutErr: ->
 
       return Auth
 

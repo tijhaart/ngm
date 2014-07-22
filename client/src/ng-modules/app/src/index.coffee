@@ -7,7 +7,7 @@
 ###
 module = do ( module = angular.module('app', ['session', 'auth', 'logger']) )->
 
-  module.run di ($session, $log)->
+  module.run di ($session, $log, $http)->
     log = $log "#{module.name}:run"
     session = $session.createSession()
 
@@ -15,9 +15,14 @@ module = do ( module = angular.module('app', ['session', 'auth', 'logger']) )->
       email:'johndoe@example.com'
       password: 'demo'
 
-    session.$auth.login(user)
+    session.$auth.login().then (user)->
+      log.debug 'authenticated user', user
+    , (res)->
+      log.warn res
+
+      session.$auth.login(user)
       .then (user)->
-        log.info 'user', user
+        log.debug 'user', user
       , (err)->
         log.error 'err', err
 

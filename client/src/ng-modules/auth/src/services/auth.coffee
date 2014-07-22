@@ -5,9 +5,11 @@ do (module)->
    *
    * @description
    * [description]
-  ###  
-  module.service '$auth', di ()->
-    
-    
+  ###
+  module.service '$auth', di ($session)->
+
+    @token = (session)->
+      session = session or $session.getCurrSession()
+      return session.$auth.token()
 
     return this

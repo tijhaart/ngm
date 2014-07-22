@@ -6,29 +6,33 @@ do (module)->
    * @description
    * [description]
   ###
-  module.constant 'LOG_LEVELS',
-    log: 0
-    info: 1
-    warn: 2
-    debug: 3
-    error: 4
-    all: 5
-    none: 6
 
+  ###*
+   * LogConfig
+   *
+   * LogConfig.disableLoggers {Object[]}
+   *   A way to centralize filtering of log messages in the console
+   *   Example: {namespace: '*', levels: ['all']} will disable all log messages
+   *   except for namespace patterns like "name:space" with other levels defined
+   *   than 'all'
+   *
+   * @note Available log levels are 'all', 'none', 'log', 'info', 'warn', 'debug' and 'error'
+  ###
   module.value 'LogConfig',
     disableLoggers: [
       {
         namespace: '*'
-        levels: ['all']
-      },
-      {
-        namespace: 'someapp:*'
-        levels: ['all']
-      },
-      {
-        namespace: 'auth:*'
         levels: ['log', 'info']
+      },
+      {
+        # support 'namespace*' instead of only $storage:*
+        namespace: '$storage'
+        levels: ['all']
       }
+      # {
+      #   namespace: 'auth:*'
+      #   levels: ['log', 'info']
+      # }
     ]
 
   ###**
@@ -39,10 +43,7 @@ do (module)->
    * [description]
   ###
   module.config di ($provide)->
-    $provide.decorator '$log', di ($delegate, LogConfig, LOG_LEVELS)->
-
-      #console.log LogConfig, LOG_LEVELS
-
+    $provide.decorator '$log', di ($delegate, LogConfig)->
       origin = $delegate
 
       Log = (namespace)->
@@ -60,6 +61,8 @@ do (module)->
         if result.length
           return result[0]
         return undefined
+
+      patterns = _.pluck LogConfig.disableLoggers, 'namespace'
       Log.canLog = (namespace, method)->
 
         # when one of the patterns match the namespace
@@ -67,7 +70,6 @@ do (module)->
         # then ignore the "match all namespaces pattern *""
         # and let the log method execute
 
-        patterns = _.pluck LogConfig.disableLoggers, 'namespace'
         allowed = []
 
         matches = _.filter patterns, (pattern, index)->
@@ -103,9 +105,7 @@ do (module)->
         #console.log enabled: isEnabled, disabled: isDisabled, namespace: namespace, method: method, matches: matches
         return isEnabled
 
-
       _.forEach $delegate, (method, methodName)->
-        #console.log 'decorate method:', methodName
         Log.prototype[methodName] = ->
           args = Array.prototype.slice.call arguments
 

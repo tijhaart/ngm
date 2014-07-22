@@ -149,6 +149,7 @@ jsVendorTask = ->
   paths =
     "lodash":             '/dist/lodash.js'
     "underscore.string":  '/lib/underscore.string.js'
+    "moment":             '/moment.js'
     "jquery":             '/dist/jquery.js'
     "angular":            '/angular.js'
     # "breezejs":           ['/breeze.debug.js', '/labs/breeze.metadata-helper.js', '/labs/breeze.angular.js']

@@ -5,13 +5,12 @@ do (module)->
    *
    * @description
    * [description]
-  ###  
-  module.service 'AuthUserInterceptor', di ($q, $session)->
-    
-    @request = (req)->
-      session = $session.getCurrSession()
+  ###
+  module.service 'AuthUserInterceptor', di ($log, $q, $auth)->
+    log = $log "#{module.name}:AuthUserInterceptor"
 
-      if token = session.$auth.token()
+    @request = (req)->
+      if token = $auth.token()
         req.headers.authorization = token
 
       return req
