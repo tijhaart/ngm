@@ -31,8 +31,6 @@ do (module)->
       AuthUser = $model 'AuthUser'
       User = $model 'User'
 
-      console.dir User
-
       Auth = (session)->
         _log = $log "#{module.name}:Auth"
         self = @
@@ -77,10 +75,6 @@ do (module)->
             # to the login section
 
             log.debug 'authenticated', authenticated
-
-            $timeout ->
-              log.debug 'moment'
-            , 10000
 
             (User.findById id: authenticated.userId).$promise
             # success

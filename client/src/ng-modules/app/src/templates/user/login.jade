@@ -1,0 +1,19 @@
+ion-view(title="QuoteBuilder login")
+  ion-content.has-header
+    div.card
+      div.item.item-divider
+        | Login
+      form.item.item-text-wrap
+        div.list.list-inset
+          label.item.item-input
+            input(type="email", placeholder="Email", ng-model="credentials.email")
+          label.item.item-input
+            input(type="password", placeholder="Password", ng-model="credentials.password")
+
+        div.button.button-full.button-positive(
+          ng-click="UserLoginCtrl.login(credentials)"
+        )
+          | login
+
+      div.debug
+        | {{ UserLoginCtrl.credentials | json }}

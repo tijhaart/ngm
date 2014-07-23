@@ -22,7 +22,7 @@ do (module)->
     disableLoggers: [
       {
         namespace: '*'
-        levels: ['log', 'info']
+        levels: ['none']
       },
       {
         # support 'namespace*' instead of only $storage:*
@@ -64,12 +64,6 @@ do (module)->
 
       patterns = _.pluck LogConfig.disableLoggers, 'namespace'
       Log.canLog = (namespace, method)->
-
-        # when one of the patterns match the namespace
-        # and the method doesn't match the levels
-        # then ignore the "match all namespaces pattern *""
-        # and let the log method execute
-
         allowed = []
 
         matches = _.filter patterns, (pattern, index)->

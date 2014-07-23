@@ -1,20 +1,19 @@
 !!!
-html(lang="en")
+html(lang="en", ng-class="Class.html")
   head
     meta(charset="utf-8")
     meta(name="viewport", content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width")
-    title This is an AngularJS SPA (single page app)
+    title QB &mdash; QuoteBuilder&trade; &#124; by @tijhaart
 
     each stylesheet in imports.css
-      link(rel="stylesheet", href=stylesheet)
+      link(rel="stylesheet", href="/#{stylesheet}")
 
-  body
+  body(ng-class="Class.body")
 
-    div(todos)
-
+    div(ng-include="'app/main.html'")
 
   each script in imports.js
-    script(src=script, type="text/javascript")
+    script(src="/#{script}", type="text/javascript")
 
   if isDev
     //- change localhost to current system ip address for livereloading

@@ -15,9 +15,9 @@ module.exports = (options, imports, register)->
 
   server.useStatic clientPath
 
-  staticImports = 
+  staticImports =
     css: [
-      # 'vendor/ionic/css/ionic.css', # 
+      # 'vendor/ionic/css/ionic.css', #
       'css/app.css']
     js: ['vendor/vendor.js', 'js/app.js']
 
@@ -26,7 +26,10 @@ module.exports = (options, imports, register)->
     css: []
     js: []
 
-  app.get '/app', routes.app(imports:staticImports, isDev: isDev, isHybridBuild:false)
+  spaCtrl = routes.app(imports:staticImports, isDev: isDev, isHybridBuild:false)
+  app.get '/app', spaCtrl
+  app.get '/app*', spaCtrl
+
   app.get '/', (req, res)->
     res.send 'It works! <br> ' + Path.relative imports.config.projectPath, __dirname
 

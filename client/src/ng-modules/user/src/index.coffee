@@ -3,9 +3,9 @@
  * @name user
  *
  * @description [description]
- * 
+ *
 ###
-module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
+module = do ( module = angular.module('user', ['models', 'session', 'auth', 'logger']) )->
   return module
 
   tokenId = null
@@ -21,7 +21,7 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
       if tokenId
         config.headers.authorization = tokenId
 
-      console.log 'config', config     
+      console.log 'config', config
 
       return config
 
@@ -37,7 +37,7 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
       get: -> return
 
     plugin: ->
-    currentSession: -> 
+    currentSession: ->
 
   module.factory 'models', di ($resource)->
 
@@ -62,7 +62,7 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
           return
         isAuthenticated: ->
 
-    sessionPlugins.push 
+    sessionPlugins.push
       user: (user)->
         # @_user should be stored elsewhere instead of directly on the session instance
         if not _.isUndefined user
@@ -97,8 +97,8 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
 
           'auth.login': (res)->
             console.log 'user.login', res
-            token = res.resource 
-            
+            token = res.resource
+
             # session.$auth.store
             #   remember: false
             #   token: token.id
@@ -115,7 +115,7 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
 
             # logout but remember login
 
-            #return 
+            #return
             accessToken: res.resource
             user: user
 
@@ -135,7 +135,7 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
       logout:
         url: resource.url '/logout'
         method: 'post'
-        interceptor: 
+        interceptor:
           response: loopback.responseInterceptor('auth.logout')()
           # request: loopback.requestInterceptor('auth.logout')()
 
@@ -161,7 +161,7 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
 
       success = -> console.log 'success', arguments
       err     = -> console.log 'err', arguments
-      
+
       user = res.user
       user.$logout
         id:null
@@ -185,7 +185,7 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
     onEnd = ->
       console.log 'onEnd', arguments
 
-    (User.findOne 
+    (User.findOne
       filter: where: email: 'dun@bar.com'
     ).$promise
       .then(onSuccess, onError)
@@ -197,9 +197,9 @@ module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
     onModelErr = (res)->
       console.log '[model][err]', res.data.error.message
     ###
-    
 
-    collection = 
+
+    collection =
       user: {}
 
     #return
