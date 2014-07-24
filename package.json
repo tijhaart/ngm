@@ -70,7 +70,7 @@
     "loopback": "~2.0.0-beta5",
     "loopback-boot": "~2.0.0-beta1",
     "loopback-datasource-juggler": "~2.0.0-beta2",
-    "loopback-explorer": "~1.1.1",
+    "loopback-explorer": "^1.1.1",
     "method-override": "^2.1.1",
     "morgan": "^1.1.1",
     "through": "~2.3.4",

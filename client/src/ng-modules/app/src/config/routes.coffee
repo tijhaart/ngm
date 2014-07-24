@@ -19,5 +19,11 @@ do (module)->
         templateUrl: 'app/user/login.html'
         controller: 'UserLoginCtrl'
       )
+      .state(
+        name: 'dashboard'
+        url: '/'
+        templateUrl: 'app/dashboard/dashboard.html'
+        controller: 'DashBoardCtrl'
+      )
 
     return
