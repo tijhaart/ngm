@@ -8,6 +8,7 @@ Path        = require 'path'
 yargs       = require 'yargs'
 streamqueue = require 'streamqueue'
 bower       = require 'bower'
+log4js      = require 'log4js'
 
 ngm         = require './build-support/ngm'
 imports     = require './build-support/gulp-imports'
@@ -145,6 +146,10 @@ ngmImgTask = (ngmodule)->
   gulp.src ngmodule.path + '/img/*.{png,jpg,gif,svg,jpeg}'
     .pipe gulp.dest 'dist/public/img/' + path
 
+bower = require './bower.json'
+fs    = require 'fs'
+logVendor = log4js.getLogger 'vendor'
+
 jsVendorTask = ->
   paths =
     "lodash":             '/dist/lodash.js'
@@ -159,18 +164,29 @@ jsVendorTask = ->
     "angular-ui-router":  '/release/angular-ui-router.js'
     "ionic":              ['/js/ionic.js', '/js/ionic-angular.js']
     # "lb-services":        '/index.js'
-    "angular-gettext":    '/dist/angular-gettext.js'
+    # "angular-gettext":    '/dist/angular-gettext.js'
 
-  bower = require './bower.json'
+  # @Todo: include setting verbose to true/false for showing verbose/debug output
+  verbose = true
+
+  buildSrcPath = (vendorRoot, filename)->
+    source = Path.join 'client/src/vendor', vendorRoot, filename
+
+    if verbose
+      exists = fs.existsSync source
+      if not exists then logVendor.error "404 - #{source}"
+
+    return source
+
   # this will maintain the order set in in bower.json
   sources = _.reduce bower.dependencies, (sources, version, index)->
     # will also include local vendor scripts b/c bower installs and copies to vendor dir
 
     if _.isArray paths[index]
       _.forEach paths[index], (filename)->
-        sources.push Path.join 'client/src/vendor', index, filename
+        sources.push buildSrcPath index, filename
     else if paths[index]
-      sources.push Path.join 'client/src/vendor', index, paths[index]
+      sources.push buildSrcPath index, paths[index]
     return sources
   , []
 
