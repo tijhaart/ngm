@@ -17,26 +17,49 @@ imports     = require './build-support/gulp-imports'
 coffee      = require 'gulp-coffee'
 concat      = require 'gulp-concat'
 wrap        = require 'gulp-wrap'
-pretty      = require 'gulp-js-prettify'
 cached      = require 'gulp-cached'
 remember    = require 'gulp-remember'
 jade        = require 'gulp-jade'
 ngtpl       = require 'gulp-angular-templatecache'
 sass        = require 'gulp-sass'
 plumber     = require 'gulp-plumber'
-uglify      = require 'gulp-uglify'
 gulpif      = require 'gulp-if'
 nginject    = require 'gulp-angular-injector'
-livereload  = require 'gulp-livereload'
-cssmin      = require 'gulp-minify-css'
 clean       = require 'gulp-clean'
-imgmin      = require 'gulp-imagemin'
 rename      = require 'gulp-rename'
 gettext     = require 'gulp-angular-gettext'
-karma       = require 'gulp-karma'
 shell       = require 'gulp-shell'
-protractor  = require('gulp-protractor').protractor
 prepend     = require('gulp-insert').prepend
+
+# develop
+sourcemaps  = require 'gulp-sourcemaps'
+livereload  = require 'gulp-livereload'
+pretty      = require 'gulp-js-prettify'
+
+# optimize
+imgmin      = require 'gulp-imagemin'
+cssmin      = require 'gulp-minify-css'
+uglify      = require 'gulp-uglify'
+
+# test
+protractor  = require('gulp-protractor').protractor
+karma       = require 'gulp-karma'
+mocha       = require 'gulp-mocha'
+
+gulp.task 'test:backend', ->
+  gulp.src 'app/src/**/test/*.coffee', read: false
+    # reporters: "mocha --reporters"
+    .pipe mocha {
+      reporter: 'spec',
+      globals:
+        cakes: require 'mocha-cakes'
+    }
+
+    # .on 'error', gutil.log
+
+gulp.task 'testlive:backend', ->
+  gulp.watch 'app/src/**/test/*.coffee', ['test:backend']
+
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
@@ -148,6 +171,7 @@ ngmImgTask = (ngmodule)->
 
 bower = require './bower.json'
 fs    = require 'fs'
+# todo use debug with vendor namespace
 logVendor = log4js.getLogger 'vendor'
 
 jsVendorTask = ->
