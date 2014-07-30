@@ -6,9 +6,9 @@ ion-view(title="QuoteBuilder login")
       form.item.item-text-wrap
         div.list.list-inset
           label.item.item-input
-            input(type="email", placeholder="Email", ng-model="credentials.email")
+            input(type="email", placeholder="Email", ng-model="credentials.email", required)
           label.item.item-input
-            input(type="password", placeholder="Password", ng-model="credentials.password")
+            input(type="password", placeholder="Password", ng-model="credentials.password", required)
 
         div.button.button-full.button-positive(
           ng-click="UserLoginCtrl.login(credentials)"

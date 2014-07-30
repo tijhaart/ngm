@@ -14,7 +14,7 @@ module.exports = (helper)->
           permission: 'ALLOW'
           principalType: 'ROLE'
           principalId: '$everyone'
-          property: 'create'       
+          property: 'create'     
       ]
 
   helper.register modelCfg

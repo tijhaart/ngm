@@ -30,7 +30,7 @@ module.exports = (ModelHelper)->
 
     model.create users
     , done = ->
-      console.log arguments
+      console.log '[user model] created 2 dummy users'
 
 
   return modelCfg

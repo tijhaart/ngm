@@ -27,7 +27,6 @@ module.exports = (options, imports, register)->
         lbBoot server, __dirname  
 
         server.use loopback.compress()
-
         server.use loopback.logger 'dev'
 
         restApiRoot = rest.get 'restApiRoot'
@@ -36,7 +35,7 @@ module.exports = (options, imports, register)->
         server.use restApiRoot, rest
 
         # create all the registered models via loopback.createModel {modelCfg}
-        models.attachModels(rest).then ->    
+        models.attachModels(rest).then ->
 
           # view REST API endopoint for the models 
           # via /model-explorer (default route)
@@ -44,10 +43,12 @@ module.exports = (options, imports, register)->
             rest: rest
             server: server
 
-          rest.use loopback.bodyParser()
+          # rest.use loopback.bodyParser()
+          rest.use loopback.json()
+          rest.use loopback.urlencoded()
           rest.use loopback.methodOverride()
 
-          rest.use loopback.cookieParser 'secret...'
+          rest.use loopback.cookieParser 'secret...f00b@r'
           rest.use loopback.token model: rest.models.accessToken
 
           serverUse [

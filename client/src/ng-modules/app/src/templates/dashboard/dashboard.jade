@@ -1,1 +1,10 @@
-//- @example: $templateCache.get "app/dashboard/dashboard.html"
+ion-view(title="Dashboard")
+	ion-content
+		ul
+			li Logged in as: {{ user = currentSession.user.username }}
+			li
+				a(href="",ng-click="currentSession.$auth.logout()") logout {{user}}
+			li User page history
+			li Recent invoices
+			li Projects overview
+			li Latest comments

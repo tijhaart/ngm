@@ -270,18 +270,19 @@ gulp.task 'vendor:fonts', ->
     .pipe gulp.dest 'dist/public/fonts'
 
 isRunning = false
+runServer = ->
+  if not isRunning
+    nodemon = require 'nodemon'
+    # nodemon '--ignore ./* app/src/index.coffee'
+    nodemon
+      script: 'app/src/index.coffee'
+      ignore: ['client', 'dist', 'build-support', 'docs', 'node_modules', 'test', '.{json,coffee,js,md}']
+
+    isRunning = true
+
+gulp.task 'server:standalone', -> runServer(); return
+
 gulp.task 'server:run', ['build'], ->
-
-  runServer = ->
-    if not isRunning
-      nodemon = require 'nodemon'
-      # nodemon '--ignore ./* app/src/index.coffee'
-      nodemon
-        script: 'app/src/index.coffee'
-        ignore: ['client', 'dist', 'build-support', 'docs', 'node_modules', 'test', '.{json,coffee,js,md}']
-
-      isRunning = true
-
   runServer()
   return
 

@@ -21,16 +21,16 @@ module.exports = (options, imports, register)->
         options: {}
         dataSource: 'db'
 
-      console.log '[ModelHelper] register', modelCfg.name
+      # console.log '[ModelHelper] register', modelCfg.name
 
       modelFactory = (app, modelsResolved)->
-        console.log '[ModelHelper] attach to (given) app'
+        # console.log '[ModelHelper] attach to (given) app'
         Model = app.model loopback.createModel modelCfg
         # when models resolved then resolve model with models
         modelsResolved.then (models)->
           modelCreated.resolve(model: Model, models: models)
 
-      console.log @
+      # console.log @
 
       @$models.push 
         name: modelCfg.name, 

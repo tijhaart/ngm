@@ -1,7 +1,7 @@
 do (module)->
   ###**
    * @ngdoc constant
-   * @name logger.constant:LOG_LEVELS
+   * @name utilLogger.constant:LOG_LEVELS
    *
    * @description
    * [description]
@@ -29,10 +29,10 @@ do (module)->
         namespace: '$storage'
         levels: ['all']
       }
-      # {
-      #   namespace: 'auth:*'
-      #   levels: ['log', 'info']
-      # }
+      {
+        namespace: 'auth:*'
+        levels: ['none']
+      }
     ]
 
   ###**
@@ -103,7 +103,9 @@ do (module)->
         Log.prototype[methodName] = ->
           args = Array.prototype.slice.call arguments
 
-          if Log.canLog @namespace, methodName
+          _namespace = if @suffix then "#{@namespace}:#{@suffix}" else @namespace
+
+          if Log.canLog _namespace, methodName
             colors =
               log: 'blue'
               info: 'teal'
@@ -115,11 +117,16 @@ do (module)->
             prefix = [
               "%c#{methodName}",
               "background:#{colors[methodName]}; color:#{textColor}; padding:2px; font-size: 0.8em;",
-              "[#{@namespace}]",
+              "[#{_namespace}]",
             ]
 
             args = prefix.concat args
             method.apply this, args
+            return this
+
+      Log.prototype.ns = (suffix)->
+        @suffix = suffix
+        return this
 
       ns = (namespace)->
         log = Log.getLogger namespace

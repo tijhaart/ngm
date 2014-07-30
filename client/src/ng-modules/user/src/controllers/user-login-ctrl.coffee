@@ -12,8 +12,6 @@ do (module)->
     session = $session.getCurrSession()
     $scope['UserLoginCtrl'] = @
 
-    log.debug 'hello from me'
-
     $scope.credentials = @credentials =
       email: null
       password: null

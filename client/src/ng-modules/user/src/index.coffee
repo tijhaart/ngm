@@ -5,7 +5,7 @@
  * @description [description]
  *
 ###
-module = do ( module = angular.module('user', ['models', 'session', 'auth', 'logger']) )->
+module = do ( module = angular.module('user', ['models', 'session', 'auth']) )->
   return module
 
   tokenId = null

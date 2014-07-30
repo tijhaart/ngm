@@ -14,16 +14,24 @@ do (module)->
 
     $stateProvider
       .state(
+        name: 'dashboard'
+        url: app.base
+        templateUrl: 'app/dashboard/dashboard.html'
+        data:
+          acls: [
+            { 
+              accessType: '*'
+              permission: 'ALLOW'
+              principalType: 'Role'
+              principalId: '$everyone' 
+            }
+          ]
+      )
+      .state(
         name: 'user-login'
         url: app.url '/login'
         templateUrl: 'app/user/login.html'
         controller: 'UserLoginCtrl'
-      )
-      .state(
-        name: 'dashboard'
-        url: '/'
-        templateUrl: 'app/dashboard/dashboard.html'
-        controller: 'DashBoardCtrl'
       )
 
     return
