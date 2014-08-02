@@ -5,7 +5,6 @@ _           = require 'lodash'
 
 module.exports = (options, imports, register)->
 
-  registerModel = imports.models.registerModel
   server        = imports.server
   app           = server.instance
   clientPath    = imports.config.clientPath

@@ -1,17 +1,21 @@
 loopback  = require 'loopback'
 _         = require 'lodash'
-Q         = require('bluebird')
+Promise   = require('bluebird')
+log       = (require 'log4js').getLogger 'models'
 
 module.exports = (options, imports, register)->
+  bus             = imports.bus
   ModelHelper     = imports['plugin.model.helper']()
-  modelsAttached  = Q.pending()
+  modelsAttached  = Promise.pending()
 
-  # require('./default-models/project')(ModelHelper)
 
   defaultModels = ['project', 'task', 'user', 'accessToken', 'acl']
 
-  _.forEach defaultModels, (modelName)-> 
-    require("./default-models/#{modelName}")(ModelHelper)
+  models = _.map defaultModels, (modelName)-> 
+    model = require("./default-models/#{modelName}")()    
+    log.debug 'register model: ' + model.name
+    # ModelHelper.register model
+    return model
 
   ###*
    * Create and attach loopback models to the given (loopback/express) app
@@ -19,16 +23,21 @@ module.exports = (options, imports, register)->
    * @return {promise}      All models are attached
   ###
   attachModels = (app)->
+    log.debug 'attach models'
 
-    _.forEach ModelHelper.$models, (model)->
-      model.factory app, modelsAttached.promise
+    if ModelHelper.$models.length
+      _.forEach ModelHelper.$models, (model)->
+        model.factory app, modelsAttached.promise
 
-    modelsAttached.resolve(app.models)
+      modelsAttached.resolve(app.models)
+    else 
+      # modelsAttached.reject message: 'No models'
 
     return modelsAttached.promise
 
   register null,
-    models:
+    model:
+      models: models
       modelsAttached: modelsAttached.promise
       registerModel: -> ModelHelper.register.apply(ModelHelper, arguments)
       attachModels: attachModels

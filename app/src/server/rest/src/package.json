@@ -3,7 +3,7 @@
   "main": "rest.coffee",
 
   "plugin": {
-    "consumes": [],
+    "consumes": ["bus", "model", "modelExplorer"],
     "provides": ["rest"]
   }
 }

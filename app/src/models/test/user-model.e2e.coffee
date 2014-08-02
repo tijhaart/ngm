@@ -1,23 +1,30 @@
-# require 'mocha-cakes'
-expect = (require 'chai').expect
+(require __base '/test/setup').prepEnv()
 
-describe 'User model', ->
 
-	Scenario 'foobar', ->
 
-		model = null
 
-		Given "model user", -> 
-			model = 'user'
-		Then "it should have the user model", ->
-			expect(model).to.equal('user')
+# models = require '../src/models'
+# helper = require __base '/app/plugins/model/src/model'
 
-			Scenario 'after foobar then blaat', ->
-				prev = null
-				Given ->
-					prev = model
-					model = 'bar'
-				Then 'it should be bar', ->
-					expect(model).to.equal 'bar'
-				And 'prev to equal user', ->
-					expect(prev).to.equal 'user'
+###*
+ * 1. get registered packages (/app/src/index.coffe, getPackagesCfg)
+ * 2. filter required packages
+ * 3. create architect app
+ * 4. after app created then run tests
+ * 
+ * inject 'plugin.module'
+###
+
+# imports =
+# 	"plugin.model.helper": ->
+
+# describe 'foobar', ->
+# 	beforeEach ->
+# 		models {}, imports, register = ->
+
+# 	one = null
+
+# 	Given ->
+# 		one = 1
+# 	Then 'should one == ' + one, ->
+# 		expect(one).to.equal(1)

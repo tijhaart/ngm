@@ -1,12 +1,14 @@
 loopback = require 'loopback'
 lbBoot   = require 'loopback-boot'
 _        = require 'lodash' # make globaly available via imports/architect
+log      = (require 'log4js').getLogger 'server'
 
 
 module.exports = (options, imports, register)->
-  models          = imports.models
-  modelExplorer   = imports.modelExplorer
-  rest            = imports.rest.instance
+  bus             = imports.bus
+  # models          = imports.models
+  # modelExplorer   = imports.modelExplorer
+  # rest            = imports.rest.instance
   # clientModels    = imports["models.client"]
   projectPath     = imports.config.projectPath
   server          = loopback()
@@ -17,50 +19,71 @@ module.exports = (options, imports, register)->
       server.use middleware
     return
   # config
-  server.set('view engine', 'jade')
+  server.set 'view engine', 'jade'
+
+  bus.on 'server:preSetup', preSetupServer = (server)->   
+
+    server.use loopback.compress()
+    server.use loopback.logger 'dev'
+
+    lbBoot server, __dirname
+
+  bus.on 'server:postSetup', (server)->
+    serverUse [
+      loopback.urlNotFound(),
+      loopback.errorHandler()
+    ]
+    return
+
+  bus.emit 'server:preSetup', server
+  bus.emit 'server:setup', server
+  bus.emit 'server:postSetup', server
 
   register null,
     server:
       instance: server
-      start: ->       
+      start: ->    
+        return   
 
-        lbBoot server, __dirname  
+        # lbBoot server, __dirname  
 
-        server.use loopback.compress()
-        server.use loopback.logger 'dev'
+        # server.use loopback.compress()
+        # server.use loopback.logger 'dev'
 
-        restApiRoot = rest.get 'restApiRoot'
-        # This will bind the rest app on the restApiRoot.
-        # Example usage: localhost:3000/api/<resource>
-        server.use restApiRoot, rest
+        # restApiRoot = rest.get 'restApiRoot'
+        # # This will bind the rest app on the restApiRoot.
+        # # Example usage: localhost:3000/api/<resource>
+        # server.use restApiRoot, rest
 
-        # create all the registered models via loopback.createModel {modelCfg}
-        models.attachModels(rest).then ->
+        # # create all the registered models via loopback.createModel {modelCfg}
+        # models.attachModels(rest).then ->
 
-          # view REST API endopoint for the models 
-          # via /model-explorer (default route)
-          modelExplorer
-            rest: rest
-            server: server
+        #   # view REST API endopoint for the models 
+        #   # via /model-explorer (default route)
+        #   modelExplorer
+        #     rest: rest
+        #     server: server
 
-          # rest.use loopback.bodyParser()
-          rest.use loopback.json()
-          rest.use loopback.urlencoded()
-          rest.use loopback.methodOverride()
+        #   # rest.use loopback.bodyParser()
+        #   rest.use loopback.json()
+        #   rest.use loopback.urlencoded()
+        #   rest.use loopback.methodOverride()
 
-          rest.use loopback.cookieParser 'secret...f00b@r'
-          rest.use loopback.token model: rest.models.accessToken
+        #   rest.use loopback.cookieParser 'secret...f00b@r'
+        #   rest.use loopback.token model: rest.models.accessToken
 
-          serverUse [
-            loopback.urlNotFound(),
-            loopback.errorHandler()
-          ]
+        #   serverUse [
+        #     loopback.urlNotFound(),
+        #     loopback.errorHandler()
+        #   ]
 
-          rest.enableAuth()
+        #   rest.enableAuth()
 
-          console.log '[server] starting server'
-          server.listen 3000, ()->
-            baseUrl = 'http://' + (server.get('host') or '0.0.0.0') + ':' + server.get('port')
-            console.log '[server] server started at: %s', baseUrl
+        #   console.log '[server] starting server'
+        #   server.listen 3000, ()->
+        #     bus.emit 'server:started', server
+
+        #     baseUrl = 'http://' + (server.get('host') or '0.0.0.0') + ':' + server.get('port')
+        #     console.log '[server] server started at: %s', baseUrl
       useStatic: (dir)->
         server.use loopback.static dir

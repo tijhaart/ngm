@@ -5,6 +5,7 @@ yargs       = require 'yargs'
 color       = require 'chalk'
 glob        = require 'glob'
 $path       = require 'path'
+log         = (require 'log4js').getLogger('[architect]')
 
 startServer = Promise.pending()
 cliArgs     = yargs.argv
@@ -18,7 +19,7 @@ getPackgesCfg = ->
     __dirname + '/**/package.json'
     base + '/plugins' + '/**/package.json'
   ]
-  console.log '[architect] searching architect packages'
+  log.info 'searching architect packages'
 
   pluginPaths = _.reduce packages, (pluginPaths, pluginGlob)->
     globbed = Promise.pending()
@@ -43,7 +44,7 @@ getPackgesCfg().then (packages)->
   architect.createApp packages, (err, app)->
     throw err if err 
 
-    console.log color.blue('[architect]') + ' app ready'
+    log.info 'app ready'
     
     services = app.services
     server   = services.server

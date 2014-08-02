@@ -46,14 +46,14 @@ protractor  = require('gulp-protractor').protractor
 karma       = require 'gulp-karma'
 mocha       = require 'gulp-mocha'
 
+
 gulp.task 'test:backend', ->
+  global.__base = (path)-> __dirname + path
+
   gulp.src 'app/src/**/test/*.coffee', read: false
     # reporters: "mocha --reporters"
-    .pipe mocha {
-      reporter: 'spec',
-      globals:
-        cakes: require 'mocha-cakes'
-    }
+    .pipe mocha
+      reporter: 'spec'
 
     # .on 'error', gutil.log
 
