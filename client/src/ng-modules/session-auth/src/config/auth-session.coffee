@@ -13,16 +13,16 @@ do (module)->
 
     $modelProvider.register 'AuthUser', di ($resource)->
 
-      User = $resource '/api/v0/users', null,
+      User = $resource '/api/0/users', null,
         login:
-          url: '/api/v0/users/login'
+          url: '/api/0/users/login'
           method: 'POST'
           params:
             include: 'user'
           interceptor:
             response: (res)-> res
         logout:
-          url: '/api/v0/users/logout'
+          url: '/api/0/users/logout'
           method: 'post'
 
       return User

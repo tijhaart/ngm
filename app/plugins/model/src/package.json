@@ -1,9 +1,0 @@
-{
-  "name": "Model helper",
-  "main": "model.coffee",
-
-  "plugin": {
-    "consumes": [],
-    "provides": ["plugin.model.helper"]
-  }
-}

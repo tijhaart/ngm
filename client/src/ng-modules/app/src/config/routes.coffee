@@ -8,6 +8,10 @@ do (module)->
   ###
   module.config di ($stateProvider, $urlRouterProvider)->
 
+    $urlRouterProvider
+      .when('/app/', '/app')
+      .otherwise('/app/page-not-found')
+
     app =
       base: '/app'
       url: (path)-> "#{this.base}#{path}"
@@ -32,6 +36,11 @@ do (module)->
         url: app.url '/login'
         templateUrl: 'app/user/login.html'
         controller: 'UserLoginCtrl'
+      )
+      .state(
+        name: '404'
+        url: app.url '/page-not-found'
+        templateUrl: 'app/err/404.html'
       )
 
     return

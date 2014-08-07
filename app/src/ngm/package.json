@@ -1,9 +1,0 @@
-{
-  "name": "ngm",
-  "main": "ngm.coffee",
-
-  "plugin": {
-    "consumes": ["config", "server"],
-    "provides": []
-  }
-}

@@ -68,6 +68,7 @@
     "through2": "~0.4.1"
   },
   "dependencies": {
+    "architect-autoloader": "^0.0.1",
     "architect": "~0.1.11",
     "bluebird": "^1.2.4",
     "coffee-script": "~1.7.1",

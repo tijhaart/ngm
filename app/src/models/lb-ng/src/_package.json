@@ -1,9 +1,0 @@
-{
-  "name": "lb-ng",
-  "main": "lb-ng.coffee",
-
-  "plugin": {
-    "consumes": [],
-    "provides": ["models.client"]
-  }
-}

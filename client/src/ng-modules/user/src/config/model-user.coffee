@@ -10,9 +10,9 @@ do (module)->
 
     $modelProvider.register 'User', di ($resource)->
 
-      User = $resource '/api/v0/users/:id', {id: '@id'},
+      User = $resource '/api/0/users/:id', {id: '@id'},
         findById:
-          url: '/api/v0/users/:id'
+          url: '/api/0/users/:id'
           method: 'get'
 
       return User

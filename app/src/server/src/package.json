@@ -1,9 +1,0 @@
-{
-  "name": "server",
-  "main": "server.coffee",
-
-  "plugin": {
-    "consumes": ["bus", "config"],
-    "provides": ["server"]
-  }
-}

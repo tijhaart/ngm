@@ -50,7 +50,7 @@ mocha       = require 'gulp-mocha'
 gulp.task 'test:backend', ->
   global.__base = (path)-> __dirname + path
 
-  gulp.src 'app/src/**/test/*.coffee', read: false
+  gulp.src 'server/src/**/test/*.coffee', read: false
     # reporters: "mocha --reporters"
     .pipe mocha
       reporter: 'spec'
@@ -58,7 +58,7 @@ gulp.task 'test:backend', ->
     # .on 'error', gutil.log
 
 gulp.task 'testlive:backend', ->
-  gulp.watch 'app/src/**/test/*.coffee', ['test:backend']
+  gulp.watch 'server/src/**/test/*.coffee', ['test:backend']
 
 
 ngmodulesGlob = './client/src/ng-modules/**/src'
@@ -299,8 +299,8 @@ runServer = ->
     nodemon = require 'nodemon'
     # nodemon '--ignore ./* app/src/index.coffee'
     nodemon
-      script: 'app/src/index.coffee'
-      ignore: ['client', 'dist', 'build-support', 'docs', 'node_modules', 'test', '.{json,coffee,js,md}']
+      script: 'server/src/index.coffee'
+      ignore: ['client', 'dist', 'build-support', 'docs', 'node_modules', 'test', '.{coffee,js,md}']
 
     isRunning = true
 
@@ -370,7 +370,7 @@ gulp.task 'watch', ['build'], ->
 
   gulp.watch [
     'dist/public/**/*.{js,css,png,jpg,gif,svg,jpeg}',
-    'app/{src,plugins}/**/*'], (change)->
+    'server/{src,plugins}/**/*'], (change)->
     log.info "[#{change.type}] #{Path.relative './', change.path}"
     # Full page reload
     # https://github.com/vohof/gulp-livereload/issues/7

@@ -1,9 +1,0 @@
-{
-	"name": "Event",
-	"main": "event",
-
-	"plugin": {
-    "consumes": [],
-    "provides": ["plugin.event.emitter"]
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "name": "site",
-  "main": "site.coffee",
-
-  "plugin": {
-    "consumes": ["pages"],
-    "provides": ["site"]
-  }
-}

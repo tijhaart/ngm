@@ -12,6 +12,7 @@ module = do ( module = angular.module('app', ['session', 'auth', 'ionic', 'util'
     session = $session.createSession()
     $rootScope.$log = $log
     $rootScope.currentSession = session
+    
 
     # service
     $stateChange

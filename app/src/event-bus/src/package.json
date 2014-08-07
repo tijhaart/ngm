@@ -1,9 +1,0 @@
-{
-	"name": "Event Bus",
-	"main": "event-bus",
-
-	"plugin": {
-    "consumes": ["plugin.event.emitter"],
-    "provides": ["bus"]
-  }
-}

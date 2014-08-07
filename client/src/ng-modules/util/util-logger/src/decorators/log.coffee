@@ -99,6 +99,7 @@ do (module)->
         #console.log enabled: isEnabled, disabled: isDisabled, namespace: namespace, method: method, matches: matches
         return isEnabled
 
+      logCounter = 1;
       _.forEach $delegate, (method, methodName)->
         Log.prototype[methodName] = ->
           args = Array.prototype.slice.call arguments
@@ -115,7 +116,7 @@ do (module)->
             textColor = if methodName != 'warn' then '#fff' else '#000'
 
             prefix = [
-              "%c#{methodName}",
+              "#{logCounter++} %c#{methodName}",
               "background:#{colors[methodName]}; color:#{textColor}; padding:2px; font-size: 0.8em;",
               "[#{_namespace}]",
             ]

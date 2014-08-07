@@ -1,9 +1,0 @@
-{
-  "name": "rest",
-  "main": "rest.coffee",
-
-  "plugin": {
-    "consumes": ["bus", "model", "modelExplorer"],
-    "provides": ["rest"]
-  }
-}

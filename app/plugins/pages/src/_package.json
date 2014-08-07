@@ -1,9 +1,0 @@
-{
-  "name": "pages",
-  "main": "pages.coffee",
-
-  "plugin": {
-    "consumes": [],
-    "provides": ["page"]
-  }
-}
