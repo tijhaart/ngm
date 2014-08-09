@@ -20,6 +20,8 @@ module.exports.setup = (options, imports, register)->
 	_ 				= imports['util'].lodash
 	$promise 	= imports['util'].promise
 
+	log.setLevel 'info'
+
 	# rest.dataSources
 	dataSources = 
 		db:
@@ -29,7 +31,7 @@ module.exports.setup = (options, imports, register)->
 	# clean up Architect leftovers
 	delete models['name']
 
-	log.debug 'Creating loopback app: rest'
+	log.info 'Creating loopback app: rest'
 
 	config.defaults
 		restApiRoot: '/api/0'
@@ -44,7 +46,7 @@ module.exports.setup = (options, imports, register)->
 	# Middleware (1)
 	rest.use lb.rest()
 	rest.use lb.json()
-	rest.use lb.urlencoded()
+	rest.use lb.urlencoded(extended:true)
 	rest.use lb.methodOverride()
 	rest.use lb.cookieParser config.cookieSecret
 	rest.use lb.token model: models.accessToken

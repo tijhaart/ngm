@@ -13,7 +13,7 @@ module.exports.setup = (options, imports, register)->
 	config 	= imports['$config'] 'angularSpa'
 	$path 	= imports['util'].path
 
-	log.debug 'Creating Loopback app: spa'
+	log.info 'Creating Loopback app: spa'
 
 	config.defaults
 		# public should be a symlink to "<project>/dist/public"
