@@ -7,7 +7,7 @@ module.exports =
 
 module.exports.setup = (options, imports, register)->
 
-	register null
+	register null,
 		'rest.models': 
 			user: imports['rest.models.user']
 			accessToken: imports['security.models'].accessToken

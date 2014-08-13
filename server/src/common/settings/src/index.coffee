@@ -1,3 +1,6 @@
+###*
+ * Merge various settings based on enviroment
+###
 module.exports =
 	consumes: [
 		'$log',

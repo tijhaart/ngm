@@ -46,7 +46,7 @@ module.exports.setup = (options, imports, register)->
 	server.use lb.urlNotFound()
 	server.use lb.errorHandler()
 
-	hub.on 'ready', ->
+	startServer = ->
 		server.listen config.port, ->
 			network = this.address()
 			baseUrl = 'http://' + (server.get('host') or network.address) + ':' + network.port
@@ -55,3 +55,4 @@ module.exports.setup = (options, imports, register)->
 	register null,
 		server:
 			app: server
+			start: startServer.bind this
