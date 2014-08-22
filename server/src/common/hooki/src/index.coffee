@@ -36,13 +36,26 @@ Hooki =
 Hooki.Master:: =
 	slave: (slaveOpts={})->
 		master 	= this
-		slave 	= new Hooki.Slave slaveOpts
+
+		Slave 	= Hooki.Slave
+		slave 	= new Slave slaveOpts
 		filter 	= slave.filter 
+		config 	= slave.config
 
+		slave.config = (key, value, opts={})->
+			# @todo limit amount of hookies 
+			hookies = _.map master.hookies["#{slave.name}.#{key}"], (hooki)-> hooki.fn
+
+			console.log "hooki.slave(#{slave.name}).config.#{key}", '# configurators', hookies.length
+
+			config.apply this, [key, value, hookies, opts]
+
+			return
+
+		# @todo refactor for slave prototype
 		slave.filter = (key, value, opts={})=>
-
 			# @todo limit amount of hookies/filters 
-			hookies = _.map master.hookies["#{slave.name}.#{key}"], (hooki)-> hooki.filter
+			hookies = _.map master.hookies["#{slave.name}.#{key}"], (hooki)-> hooki.fn
 
 			console.log "hooki.slave(#{slave.name}).filter.#{key}", '# filters', hookies.length
 
@@ -74,10 +87,14 @@ Hooki.Master:: =
 					if not (_.isArray hookies[index]) then hookies[index] = []
 
 					if _.isFunction hooki
-						hookiFilterFn = hooki
+						fn = hooki
 						hooki =
 							priority: 100
-							filter: hookiFilterFn
+							fn: fn
+					else if hooki.filter
+						hooki.fn = hooki.filter
+					else if hooki.config
+						hooki.fn = hooki.config
 
 					hookies[index].push hooki
 					return
@@ -98,7 +115,11 @@ Hooki.Slave:: =
 	# hooki:
 	# 	'x.register.user': (fn)->
 	# 		fn name:'john', email:'jdoe@mail.com'
-	config: ->
+	config: (key, value, configurators, opts={})->
+		_.forEach configurators, (configurator)->
+			configurator(value)
+			return
+		return
 	filter: (key, value, filters, opts={})->
 		value = _.reduce filters, (value, filter)-> 
 			filter value

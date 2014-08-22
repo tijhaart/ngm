@@ -156,3 +156,51 @@ describe '$hooki.architect', ->
 		Then 'it should not have run the registered filter again', =>
 			expect(@barA).to.equal('baz')	
 			expect(@barB).to.equal('bar')
+
+	Feature 'hooki.config', ->
+
+		Given 'plugins ready', =>
+
+			@plugins = [
+				{
+					consumes: []
+					provides: []
+					hooki:
+						'greeter.register.message': (register)->
+							register 'Hello world!'
+							register 'Hello world!'
+					setup: (options, imports, register)-> register()
+				}
+				{
+					consumes: []
+					provides: []
+					hooki:
+						'greeter.register.message': (register)->
+							register 'Hallo wereld!'
+					setup: (options, imports, register)-> register()
+				}
+				{
+					consumes: ['$hooki']
+					provides: ['messages']
+					setup: (options, imports, register)->
+						config = (imports['$hooki'].slave name: 'greeter').config
+
+						messages = []
+
+						config 'register.message', (message)->
+							if (messages.indexOf message) < 0
+								messages.push message
+								return true
+							return false
+
+						register null, messages: -> messages
+				}
+			]
+
+		When 'ready', (done)=>
+			self = this
+			autoloader.createApp(__dirname)($hooki.architect()(@plugins)).then (app)->
+				self.messages = app.services.messages()
+				done()
+		Then 'expect messages added', =>
+			expect(@messages).to.deep.equal(['Hello world!', 'Hallo wereld!'])
