@@ -300,7 +300,7 @@ runServer = ->
     # nodemon '--ignore ./* app/src/index.coffee'
     nodemon
       script: 'server/src/index.coffee'
-      ignore: ['client', 'dist', 'build-support', 'docs', 'node_modules', 'test', '.{coffee,js,md}']
+      ignore: ['client', 'dist', 'build-support', 'docs', 'node_modules', 'test', '.{js,md}']
 
     isRunning = true
 
