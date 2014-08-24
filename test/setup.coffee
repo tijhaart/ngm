@@ -7,3 +7,5 @@ module.exports.prepEnv = ->
 	global.request = require 'supertest'
 
 	return this
+
+module.exports.prepEnv()
