@@ -53,7 +53,7 @@ gulp.task 'test:backend', ->
   gulp.src 'server/src/**/test/*.coffee', read: false
     # reporters: "mocha --reporters"
     .pipe mocha
-      reporter: 'spec'
+      reporter: 'doc'
 
     # .on 'error', gutil.log
 
