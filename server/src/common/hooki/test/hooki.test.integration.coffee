@@ -1,4 +1,4 @@
-(require __base '/test/setup').prepEnv()
+#(require __base '/test/setup').prepEnv()
 
 _ 				= require 'lodash'
 $promise 	= require 'bluebird'
