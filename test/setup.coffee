@@ -1,11 +1,13 @@
 module.exports.prepEnv = ->
-	# given/when/then
-	require 'mocha-cakes'
+  # given/when/then
+  require 'mocha-cakes'
 
-	# assertions
-	global.expect = (require 'chai').expect
-	global.request = require 'supertest'
+  global.expect = (require 'chai').expect
+  global.request = require 'supertest'
 
-	return this
+  global.__base = (path)->
+    __dirname + path
+
+  return
 
 module.exports.prepEnv()
