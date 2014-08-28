@@ -5,20 +5,20 @@ html(lang="en", ng-class="$class.html")
     meta(name="viewport", content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width")
     title QB &mdash; QuoteBuilder&trade; &#124; by @tijhaart
     
-    link(rel="stylesheet", href="#{app.route}/css/app.css")
+    link(rel="stylesheet", href="#{app.static}/css/app.css")
 
   body(ng-class="$class.body")
 
     div(ng-include="'app/main.html'")
 
-  script(src="#{app.route}/vendor/vendor.js?version=#{app.version}", type="text/javascript")
-  script(src="#{app.route}/js/app.js?version=#{app.version}", type="text/javascript")
+    script(src="#{app.static}/vendor/vendor.js?version=#{app.version}", type="text/javascript")
+    script(src="#{app.static}/js/app.js?version=#{app.version}", type="text/javascript")
 
-  if isDev
-    //- change localhost to current system ip address for livereloading
-    //- on other devices within the same network
-    script(src="//localhost:35729/livereload.js")
-  else if isHybridBuild
-    script(src="cordova.js")
-  else
-    //- analytics
+    if isDev
+      //- change localhost to current system ip address for livereloading
+      //- on other devices within the same network
+      script(src="//localhost:35729/livereload.js")
+    else if isHybridBuild
+      script(src="cordova.js")
+    else
+      //- analytics
