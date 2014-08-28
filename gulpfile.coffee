@@ -47,20 +47,6 @@ karma       = require 'gulp-karma'
 mocha       = require 'gulp-mocha'
 
 
-gulp.task 'test:backend', ->
-  global.__base = (path)-> __dirname + path
-
-  gulp.src 'server/src/**/test/*.coffee', read: false
-    # reporters: "mocha --reporters"
-    .pipe mocha
-      reporter: 'doc'
-
-    # .on 'error', gutil.log
-
-gulp.task 'testlive:backend', ->
-  gulp.watch 'server/src/**/test/*.coffee', ['test:backend']
-
-
 ngmodulesGlob = './client/src/ng-modules/**/src'
 
 log     = gutil.log
